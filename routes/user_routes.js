@@ -1,20 +1,25 @@
 const express = require("express");
 const router = express.Router();
+const User=require("../controllers/user_controller")
 
 router.get("/", (req, res) => {
-res.send("get user");
+    User.getAllUsers(req,res);
 });
 
+router.get("/:id", (req, res) => {
+    User.getUserById(req,res);
+});
+
+
 router.post("/", (req, res) => {
-res.send("post user");
+    User.postUser(req,res);
 });
 
 router.put("/:id", (req, res) => {
-    res.send("put student by id: " + req.params.id);
-});
+    User.putUserById(req,res);});
 
 router.delete("/:id", (req, res) =>{
-res.send("delete student by id: " + req.params.id);
+    User.deleteUserById(req,res);
 I});
 
 module.exports = router;

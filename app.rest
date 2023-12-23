@@ -2,7 +2,28 @@
 
 GET http://localhost:3000/user
 
+###
+
+GET http://localhost:3000/user?name=Nir%20Miranda
+
+###
+
+GET http://localhost:3000/user/1234567890
+
 
 ###
 
 POST http://localhost:3000/user
+
+
+###
+
+POST http://localhost:3000/user
+Content-Type: application/json
+
+{
+    "name": "Nir Miranda",
+    "_id": "1234567891",
+    "email": "nir@gmail.com"
+}
+
