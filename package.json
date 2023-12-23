@@ -4,8 +4,9 @@
   "description": "Web application for users to share their reviews of movies",
   "main": "app.js",
   "scripts": {
-    "devstart": "nodemon app.js",
-    "start": "node app.js"
+    "test": "jest --detectOpenHandles --forceExit",
+    "devstart": "nodemon server.js",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
