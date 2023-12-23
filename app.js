@@ -19,6 +19,6 @@ const userRoute= require("./routes/user_routes")
 app.use("/user",userRoute);
 
 const port = process.env.PORT;
-app.listen (port, () => {
-console.log(`MovieRate APP is listening on port ${port}!`)
-});
+
+
+module.exports=app;
