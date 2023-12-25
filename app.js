@@ -18,7 +18,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 const userRoute= require("./routes/user_routes")
 app.use("/user",userRoute);
 
-const port = process.env.PORT;
 
 
 module.exports=app;

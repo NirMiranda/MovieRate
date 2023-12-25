@@ -4,7 +4,7 @@ GET http://localhost:3000/user
 
 ###
 
-GET http://localhost:3000/user?name=Nir%20Miranda
+GET http://localhost:3000/user?name=Nir
 
 ###
 
@@ -22,8 +22,8 @@ POST http://localhost:3000/user
 Content-Type: application/json
 
 {
-    "name": "Nir Miranda",
-    "_id": "1234567891",
-    "email": "nir@gmail.com"
+    "name": "Dorin Cohen",
+    "_id": "1234567892",
+    "email": "dorin@gmail.com"
 }
 
