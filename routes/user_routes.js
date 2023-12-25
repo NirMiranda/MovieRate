@@ -20,6 +20,6 @@ router.put("/:id", (req, res) => {
 
 router.delete("/:id", (req, res) =>{
     User.deleteUserById(req,res);
-I});
+});
 
 module.exports = router;

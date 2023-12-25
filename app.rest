@@ -18,12 +18,25 @@ POST http://localhost:3000/user
 
 ###
 
-POST http://localhost:3000/user
+POST http://localhost:3001/user
 Content-Type: application/json
 
 {
-    "name": "Dorin Cohen",
-    "_id": "1234567892",
-    "email": "dorin@gmail.com"
+    "name": "Dorin Cohen3",
+    "_id": "1234567894",
+    "email": "dorin1@gmail.com"
 }
 
+###
+
+PUT http://localhost:3001/user/1234567892
+Content-Type: application/json
+
+{
+    "name": "dorin cohen22",
+    "email": "nir12@gmail.com"
+}
+
+###
+
+DELETE  http://localhost:3001/user/1234567894
