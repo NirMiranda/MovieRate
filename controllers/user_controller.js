@@ -1,6 +1,6 @@
 const { json } = require("body-parser");
 const User= require("../models/user_model")
-
+/*crud*/
 const getAllUsers =async (req,res)=>{
     console.log("getAllUsers");
     try {
