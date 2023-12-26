@@ -32,13 +32,13 @@ const movieSchema = new mongoose.Schema({
         type: Number,
         required: true,
         min: 0,
-        max: 5,
+        max: 10,
     },
     ratingReview: {
         type: Number,
         required: true,
         min: 0,
-        max: 5,
+        max: 10,
     },
     reviews: [
         {
