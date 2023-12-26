@@ -30,11 +30,15 @@ const movieSchema = new mongoose.Schema({
     },
     ratingImdb: {
         type: Number,
-        required: true
+        required: true,
+        min: 0,
+        max: 5,
     },
     ratingReview: {
         type: Number,
-        required: true
+        required: true,
+        min: 0,
+        max: 5,
     },
     reviews: [
         {
