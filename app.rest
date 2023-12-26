@@ -27,3 +27,31 @@ Content-Type: application/json
     "email": "dorin@gmail.com"
 }
 
+### 
+
+GET http://localhost:3000/movie
+
+###
+
+GET http://localhost:3000/movie?movieName=Ilay
+
+###
+
+POST http://localhost:3000/movie
+
+###
+
+POST http://localhost:3000/movie
+Content-Type: application/json
+
+{
+    "movieName": "Ilay",
+    "year": "1998",
+    "director": "NirMir",
+    "actors": "Dodo",
+    "category": "Action",
+    "image": "pic",
+    "ratingImdb": "9.6",
+    "ratingReview": "7.3",
+
+}
