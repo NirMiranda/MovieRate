@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const reviewSchema = new mongoose.Schema({
-    moviName: {
+    movieName: {
         type: String,
         required: true
     },

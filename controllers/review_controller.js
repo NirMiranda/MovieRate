@@ -1,4 +1,4 @@
-const ReviewModel = require("../Models/reviewModel");
+const ReviewModel = require("../Models/reviewsModel");
 const User = require("../Models/userModel")
 const Movie = require("../Models/movieModel")
 
