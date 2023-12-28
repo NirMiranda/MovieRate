@@ -32,7 +32,7 @@ const postUser = async (req, res) => {
     const user=new User(req.body);
     try {
         await user.save();
-        res.send("OK")
+        res.send("OK");
     } catch (err) {
         console.log(err);
         res.send("failed: " + err.message);
@@ -54,6 +54,7 @@ const putUserById = async (req, res) => {
         // Update user fields
         user.name = name;
         user.email = email;
+        user._id=id;
 
         // Save the changes to the database
         await user.save();
