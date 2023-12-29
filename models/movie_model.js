@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const movieSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        required: true
+    },
     movieName: {
         type: String,
         required: true
@@ -29,12 +33,6 @@ const movieSchema = new mongoose.Schema({
         type: String,
     },
     ratingImdb: {
-        type: Number,
-        required: true,
-        min: 0,
-        max: 10,
-    },
-    ratingReview: {
         type: Number,
         required: true,
         min: 0,

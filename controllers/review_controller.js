@@ -2,13 +2,13 @@ const ReviewModel = require("../Models/reviewsModel");
 const User = require("../Models/userModel")
 const Movie = require("../Models/movieModel")
 
-module.exports.getObject = async (req, res) => {
+module.exports.getReview = async (req, res) => {
     const Review = await ReviewModel.find();
     res.send(Review);
 }
 
 //add Review
-module.exports.addObject = async (req, res) => {
+module.exports.addReview = async (req, res) => {
     const { name, date, text, starRank, movieId, userId } = req.body
     try {
         const movie = await Movie.findById(movieId);
@@ -24,14 +24,14 @@ module.exports.addObject = async (req, res) => {
     }
 }
 
-module.exports.updateObject = async (req, res) => {
+module.exports.updateReview = async (req, res) => {
     const { _id, name, date, text, starRank } = req.body;
     const newReview = await ReviewModel.findByIdAndUpdate(_id, { name, date, text, starRank });
     res.send(newReview);
     console.log("update succeded");
 }
 
-module.exports.deleteObject = async (req, res) => {
+module.exports.deleteReview = async (req, res) => {
     const { _id } = req.body;
     const deletedReview = await ReviewModel.findById(_id);
     const movie = await Movie.findById(deletedReview.movieId);
@@ -41,3 +41,10 @@ module.exports.deleteObject = async (req, res) => {
     const changedMovie = await Movie.findByIdAndUpdate(movie._id, movie);
     res.send("Review deleted")
 }
+module.exports = {
+    getAllMovies,
+    postMovie,
+    getMovieByName,
+    putMovieByName,
+    deleteMovieByName,
+};

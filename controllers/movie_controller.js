@@ -5,8 +5,8 @@ const getAllMovies = async (req, res) => {
     console.log("getAllMovies");
     try {
         let movies = '';
-        if (req.query.name) {
-            movies = await Movie.find({ name: req.query.name })
+        if (req.query._id) {
+            movies = await Movie.find({ _id: req.query._id })
         }
         else {
             movies = await Movie.find();
@@ -16,10 +16,10 @@ const getAllMovies = async (req, res) => {
         res.status(500).json({ message: err.message })
     }
 };
-const getMovieByName = async (req, res) => {
-    console.log("get movie by name: ", req.params.movieName);
+const getMovieById = async (req, res) => {
+    console.log("get movie by Id: ", req.params._id);
     try {
-        const movie = await movie.findById(req.params.movieName)
+        const movie = await movie.findById(req.params._id)
         res.send(movie);
     } catch (err) {
         res.status(500).json({ message: err.message })
@@ -38,17 +38,17 @@ const postMovie = async (req, res) => {
     }
 };
 
-const putMovieByName = (req, res) => {
-    res.send("put Movie by name: " + req.params.movieName);
+const putMovieById = (req, res) => {
+    res.send("put Movie by  Id: " + req.params._id);
 };
 
-const deleteMovieByName = (req, res) => {
-    res.send("delete Movie by name: " + req.params.movieName);
+const deleteMovieById = (req, res) => {
+    res.send("delete Movie by name: " + req.params._id);
 };
 module.exports = {
     getAllMovies,
     postMovie,
-    getMovieByName,
-    putMovieByName,
-    deleteMovieByName,
+    getMovieById,
+    putMovieById,
+    deleteMovieById,
 };
