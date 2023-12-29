@@ -1,15 +1,15 @@
-const { json } = require("body-parser");
-const Movie = require("../models/movie_model")
+import { json } from "body-parser";
+import { find } from "../models/movie_model";
 
 const getAllMovies = async (req, res) => {
     console.log("getAllMovies");
     try {
         let movies = '';
         if (req.query._id) {
-            movies = await Movie.find({ _id: req.query._id })
+            movies = await find({ _id: req.query._id })
         }
         else {
-            movies = await Movie.find();
+            movies = await find();
         }
         res.send(movies);
     } catch (error) {
@@ -45,7 +45,7 @@ const putMovieById = (req, res) => {
 const deleteMovieById = (req, res) => {
     res.send("delete Movie by name: " + req.params._id);
 };
-module.exports = {
+export default {
     getAllMovies,
     postMovie,
     getMovieById,
