@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User=require("../controllers/user_controller")
-
+const authMiddleWare=require('../common/auth_middleware')
 router.get("/", (req, res) => {
     User.getAllUsers(req,res);
 });
@@ -11,7 +11,7 @@ router.get("/:id", (req, res) => {
 });
 
 
-router.post("/", (req, res) => {
+router.post("/",  (req, res) => {
     User.postUser(req,res);
 });
 
@@ -23,3 +23,5 @@ router.delete("/:id", (req, res) =>{
 });
 
 module.exports = router;
+
+/* להתייעץ לגבי ה middleWare*/

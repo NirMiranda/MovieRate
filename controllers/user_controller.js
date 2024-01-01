@@ -1,4 +1,4 @@
-const { json } = require("body-parser");
+
 const User= require("../models/user_model")
 /*crud*/
 const getAllUsers =async (req,res)=>{
@@ -28,7 +28,7 @@ const getUserById = async (req, res) => {
 };
 
 const postUser = async (req, res) => {
-    console.log("postStudent: ",req.body);
+    console.log("postStudent: ", req.body);
     const user=new User(req.body);
     try {
         await user.save();
@@ -41,11 +41,9 @@ const postUser = async (req, res) => {
 
 const putUserById = async (req, res) => {
     try {
-        const id = req.params.id; // route has the user ID in params
-        const name = req.body.name;
-        const email = req.body.email;
+        const { name, email, id, isAdmin, password, age } = req.body;
 
-        const user = await User.findById(id);
+        const user = await User.findById(id); // Use _id instead of id
 
         if (!user) {
             return res.status(404).send("User not found");
@@ -54,7 +52,10 @@ const putUserById = async (req, res) => {
         // Update user fields
         user.name = name;
         user.email = email;
-        user._id=id;
+        user.id = id;
+        user.isAdmin = isAdmin;
+        user.password = password;
+        user.age = age;
 
         // Save the changes to the database
         await user.save();
