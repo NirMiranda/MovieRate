@@ -38,6 +38,35 @@ Content-Type: application/json
     "_id":"1234567899"
 }
 
+### 
+
+GET http://localhost:3000/movie
+
+###
+
+GET http://localhost:3000/movie?movieName=Ilay
+
+###
+
+POST http://localhost:3000/movie
+
+###
+
+POST http://localhost:3000/movie
+Content-Type: application/json
+
+{
+    "movieName": "Ilay",
+    "year": "1998",
+    "director": "NirMir",
+    "actors": "Dodo",
+    "category": "Action",
+    "image": "pic",
+    "ratingImdb": "9.6",
+    "ratingReview": "7.3",
+
+}
+###
 ###
 
 DELETE  http://localhost:3001/user/1234567894
