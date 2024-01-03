@@ -1,13 +1,14 @@
 ###
 
-GET http://localhost:3000/user
+GET http://localhost:3003/user
 
 
 ###
 
-### 
-POST http://localhost:3002/user
+
+POST http://localhost:3003/user
 Content-Type: application/json
+
 
 {
     "name": "Dorin Cohen3",
@@ -19,7 +20,7 @@ Content-Type: application/json
 }
 ###
 
-POST http://localhost:3002/auth/register
+POST http://localhost:3003/auth/register
 Content-Type: application/json
 
 {
@@ -30,7 +31,7 @@ Content-Type: application/json
 }
 ###
 
-POST http://localhost:3002/auth/login
+POST http://localhost:3003/auth/login
 Content-Type: application/json
 
 {
@@ -38,9 +39,37 @@ Content-Type: application/json
     "password":"12345678"
     
 }
+###
 
+POST http://localhost:3003/auth/logout
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTk1NzA0NjU4NTVkZTA0ZmFhYWY3ZDQiLCJpYXQiOjE3MDQyOTMwMDF9.s_4u9XdGYz2fljF_WmVxHivZRXTOix4RdtGchcD5AWA
+###
 
+### 
+
+GET http://localhost:3003/movie
 
 ###
 
+GET http://localhost:3003/movie?movieName=Ilay
+
+###
+
+POST http://localhost:3003/movie
+
+###
+
+POST http://localhost:3003/movie
+Content-Type: application/json
+
+{
+    "movieName": "Ilay",
+    "year": 1998,
+    "director": "NirMir",
+    "actors": "Dodo",
+    "category": "Action",
+    "image": "pic",
+    "ratingImdb":9.6
+}
 
