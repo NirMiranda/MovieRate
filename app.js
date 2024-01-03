@@ -27,6 +27,8 @@ resolve(app);
 return promise;
 };
 
+const movieRoute= require("./routes/movie_routes")
+app.use("/movie",movieRoute);
 
 
 
