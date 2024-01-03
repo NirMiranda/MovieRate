@@ -5,10 +5,10 @@ GET http://localhost:3003/user
 
 ###
 
-### 
 
 POST http://localhost:3003/user
 Content-Type: application/json
+
 
 {
     "name": "Dorin Cohen3",

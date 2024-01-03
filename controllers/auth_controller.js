@@ -1,3 +1,4 @@
+
 const User = require("../models/user_model");
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
@@ -64,6 +65,8 @@ const register = async (req, res) => {
         return res.status(400).send(`Error: ${error.message}`);
     }
 };
+
+
 
 const logout = async (req, res) => {
     const authHeader = req.headers['authorization'];

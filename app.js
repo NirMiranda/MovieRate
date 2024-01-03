@@ -30,7 +30,4 @@ return promise;
 };
 
 
-
-
-
 module.exports=initApp;
