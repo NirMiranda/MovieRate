@@ -17,6 +17,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 const userRoute= require("./routes/user_routes")
 app.use("/user",userRoute);
+const movieRoute= require("./routes/movie_routes")
+app.use("/movie",movieRoute);
 
 
 
