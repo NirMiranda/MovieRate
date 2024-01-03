@@ -41,11 +41,9 @@ Content-Type: application/json
 }
 ###
 
-
 POST http://localhost:3003/auth/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTk1NjU1ZGY5MjhmNWQ1NjRhNDY2MjIiLCJpYXQiOjE3MDQyODk2MzN9.7L-7xgfeDlB7x5h2DWz16225GvtRxOBPKcG0yYbt3vA
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTk1NzA0NjU4NTVkZTA0ZmFhYWY3ZDQiLCJpYXQiOjE3MDQyOTI0Mjh9.GtFP-fmFBFTJh3GkW5jLQuMi2_Tk1ovQA7Xjgdarq1o
 ###
 
 

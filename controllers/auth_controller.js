@@ -68,17 +68,15 @@ const register = async (req, res) => {
 const logout = async (req, res) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    console.log(req._id);
     if (token == null) {
         return res.sendStatus(401);
     }
-
-    jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, async (err, userInfo) => {
-        if (err) {
+    const userInfo=jwt.verify(token, process.env.REFRESH_TOKEN_SECRET)
+        if (userInfo==null) {
             return res.status(403).send('Invalid request0');
         }
       
-        const userId = req._id; 
+        const userId = userInfo._id; 
          console.log("the userID is:" ,userId);
         try {
             const user = await User.findById(userId);
@@ -95,11 +93,11 @@ const logout = async (req, res) => {
 
             user.tokens.splice(user.tokens.indexOf(token), 1);
             await user.save();
-            res.status(200).send('Logout successful');
+            res.status(200).send('Logout successful RefreshToken in delete');
         } catch (err) {
             res.status(403).send('Invalid request3');
         }
-    });
+   
 };
 
 
@@ -111,7 +109,7 @@ const refreshToken = async (req, res, next) => {
     jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, async (err, userInfo) => {
         if (err) return res.status(403).send(err.message);
 
-        const userId = userInfo._id;
+        const userId = req._id;
 
         try {
             user = await User.findById(userId);
