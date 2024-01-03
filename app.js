@@ -18,6 +18,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 const userRoute= require("./routes/user_routes.js")
 const authRoute = require("./routes/auth_router.js");
+const movieRoute= require("./routes/movie_routes")
+app.use("/movie",movieRoute);
 app.use("/user",userRoute);
 app.use("/auth",authRoute);
 
@@ -27,8 +29,7 @@ resolve(app);
 return promise;
 };
 
-const movieRoute= require("./routes/movie_routes")
-app.use("/movie",movieRoute);
+
 
 
 
