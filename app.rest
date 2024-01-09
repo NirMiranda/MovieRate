@@ -48,28 +48,88 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTk1NzA0N
 
 ### 
 
-GET http://localhost:3003/movie
+GET http://localhost:3003/movie/getAllMovies
 
 ###
 
-GET http://localhost:3003/movie?movieName=Ilay
+GET http://localhost:3003/movie/getMovieById/659d582f6ead8e3154f03674
+
 
 ###
 
-POST http://localhost:3003/movie
+DELETE http://localhost:3003/movie/deleteMovieById/659d59ca6981ea08e5ceb064
 
 ###
 
-POST http://localhost:3003/movie
+POST http://localhost:3003/movie/postMovie
 Content-Type: application/json
 
 {
     "movieName": "Ilay",
     "year": 1998,
     "director": "NirMir",
-    "actors": "Dodo",
-    "category": "Action",
+    "actors": ["Dodo"],
+    "genre": "Action",
     "image": "pic",
     "ratingImdb":9.6
 }
 
+###
+
+POST http://localhost:3003/movie/updateMovie
+Content-Type: application/json
+
+{
+    "_id": "659d5e1fd28a7a04a319843c",
+    "movieName": "Ilay3",
+    "year": 1998,
+    "director": "NirMir",
+    "actors": ["Dodo"],
+    "genre": "Action",
+    "image": "pic",
+    "ratingImdb":9.6
+}
+
+### 
+
+GET http://localhost:3003/review/getAllReviews
+
+### 
+
+GET http://localhost:3003/review/getReviewById/659d65858bc6fcfeca6d3345
+
+### 
+
+DELETE http://localhost:3003/review/deleteReview/659d6ca34ed570a2ee1ef759
+
+
+###
+
+POST http://localhost:3003/review/addReview
+Content-Type: application/json
+
+{
+    "date": "2021-10-10",
+    "reviewerId": "659570465855de04faaaf7d4",
+    "movieId": "659d5e1fd28a7a04a319843c",
+    "rating": 8,
+    "image": "imageURL",
+    "genre": "Action",
+    "text": "text here"
+}
+
+###
+
+POST http://localhost:3003/review/updateReview
+Content-Type: application/json
+
+{
+    "_id": "659d65858bc6fcfeca6d3345",
+    "date": "2021-10-10",
+    "reviewerId": "659570465855de04faaaf7d4",
+    "movieId": "659d5e1fd28a7a04a319843c",
+    "rating": 9,
+    "image": "imageURL",
+    "genre": "Action",
+    "text": "text here"
+}
