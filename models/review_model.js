@@ -1,18 +1,19 @@
+const { ref } = require('joi');
 const mongoose = require('mongoose');
 
 const reviewSchema = new mongoose.Schema({
-    movieName: {
-        type: String,
-        required: true
-    },
     date: {
         type: Date,
         required: true,
         default: Date.now,
     },
-    reviewer: {
+    reviewerId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
+    },
+    movieId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Movie"
     },
     rating: {
         type: Number,
@@ -20,14 +21,9 @@ const reviewSchema = new mongoose.Schema({
         min: 0,
         max: 10,
     },
-    movieName: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Movie"
-    },
     likes: {
         type: Number,
-        required: true,
-        min: 0,
+        default: 0,
     },
     image: {
         type: String,
