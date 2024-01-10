@@ -24,14 +24,12 @@ const userSchema = new mongoose.Schema({
         required:true
 
     },
-    /*
     reviewer: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "order",
         }
     ],
-    */
     age:{
         type: Number,
         required:true

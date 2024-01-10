@@ -43,7 +43,7 @@ Content-Type: application/json
 
 POST http://localhost:3003/auth/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTk1NzA0NjU4NTVkZTA0ZmFhYWY3ZDQiLCJpYXQiOjE3MDQ4OTgzNzR9.hEjsfpRH9O_E94Y4GJJj3AYirGiUqOTaTRuE3qKf5wY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTk1NzA0NjU4NTVkZTA0ZmFhYWY3ZDQiLCJpYXQiOjE3MDQ4OTkxOTh9.6FWGoptG2Te9AJ3i7wU1xQgmOFZw7LD4bnZqIEKkubw
 ###
 
 ### 
