@@ -1,5 +1,7 @@
 
 const User= require("../models/user_model")
+const {authSchema}=require('../models/validation');
+
 /*crud*/
 const getAllUsers =async (req,res)=>{
     console.log("getAllUsers");
@@ -28,7 +30,10 @@ const getUserById = async (req, res) => {
 };
 
 const postUser = async (req, res) => {
-    console.log("postStudent: ", req.body);
+    try{
+    const { email, password, name, age } = req.body;
+    await authSchema.validateAsync({ name, email, password, age });
+
     const user=new User(req.body);
     try {
         await user.save();
@@ -37,13 +42,19 @@ const postUser = async (req, res) => {
         console.log(err);
         res.send("failed: " + err.message);
     }
+    }catch (error) {
+        if (error.isJoi === true) {
+           const errorMessage = error.details[0].message; // Extract the error message from the validation error
+           res.status(400).json({ error: errorMessage }); // Return the error message as JSON
+        }
+     }
 };
 
-const putUserById = async (req, res) => {
+const updateUserById = async (req, res) => {
     try {
-        const { name, email, id, isAdmin, password, age } = req.body;
+        const { name, email, id, password, age } = req.body;
 
-        const user = await User.findById(id); // Use _id instead of id
+        const user = await User.findById(id); 
 
         if (!user) {
             return res.status(404).send("User not found");
@@ -53,7 +64,6 @@ const putUserById = async (req, res) => {
         user.name = name;
         user.email = email;
         user.id = id;
-        user.isAdmin = isAdmin;
         user.password = password;
         user.age = age;
 
@@ -97,6 +107,6 @@ module.exports= {
     getAllUsers,
     postUser,
     getUserById,
-    putUserById,
+    updateUserById,
     deleteUserById,
 };

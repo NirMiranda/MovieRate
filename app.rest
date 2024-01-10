@@ -13,7 +13,6 @@ Content-Type: application/json
 {
     "name": "Dorin Cohen3",
     "email": "dorin1@gmail.com",
-    "isAdmin":true,
     "password":"12345679",
     "age": "19"
     
@@ -25,8 +24,8 @@ Content-Type: application/json
 
 {
     "name" :"dorin cohen",
-    "email": "dorin7@gmail.com",
-    "password":"12345678",
+    "email": "dorin755@gmail.com",
+    "password":"123456",
     "age":18
 }
 ###
@@ -35,8 +34,8 @@ POST http://localhost:3003/auth/login
 Content-Type: application/json
 
 {
-    "email": "dorin7@gmail.com",
-    "password":"12345678"
+    "email": "Dorin755@gmail.com",
+    "password":"123456"
     
 }
 ###
