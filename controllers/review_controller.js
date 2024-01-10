@@ -34,10 +34,12 @@ const addReviews = async (req, res) => {
         const user = await User.findById(reviewerId);
         const newReview = new Review({ date,reviewerId,movieId, rating, image, text });
         const savedReview = await newReview.save();
+        console.log(user);
         movie.reviews.push(savedReview._id);
-        // user.reviews.push(savedReview._id);
+        user.reviews.push(savedReview._id);
 
         const changedMovie = await Movie.findByIdAndUpdate(movie._id, movie);
+        const changedUser = await User.findByIdAndUpdate(user._id, user);
         res.send(savedReview);
     } catch (err) {
         console.error(err);
