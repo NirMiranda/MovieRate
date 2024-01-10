@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const validator=require('validator');
+
 
 
 const userSchema = new mongoose.Schema({
@@ -12,22 +14,18 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-    },
-    
-    isAdmin: {
-        type: Boolean,
-        default:false,
-    },
-    
+        lowercase:true,
+        validate:[validator.isEmail,'Please provide an email']
+    },    
     password:{
         type:String,
         required:true
 
     },
-    reviewer: [
+    reviews: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "order",
+            ref: "review",
         }
     ],
     age:{

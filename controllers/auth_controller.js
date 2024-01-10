@@ -2,6 +2,8 @@
 const User = require("../models/user_model");
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
+const {authSchema}=require('../models/validation');
+
 
 const login = async (req, res) => {
     const email = req.body.email;
@@ -12,6 +14,7 @@ const login = async (req, res) => {
     }
 
     try {
+        await authSchema.validateAsync({ email, password });
         const user = await User.findOne({ 'email': email });
 
         if (user == null) {
@@ -34,21 +37,30 @@ const login = async (req, res) => {
 
         res.status(200).send({ 'accessToken': accessToken, 'refreshToken': refreshToken });
     } catch (error) {
-        return res.status(400).send(`Error: ${error.message}`);
+        if (error.isJoi === true) {
+            const errorMessage = error.details[0].message; // Extract the error message from the validation error
+            res.status(400).json({ error: errorMessage }); // Return the error message as JSON
+         }
+        else return res.status(400).send(`Error: ${error.message}`);
     }
 };
 
 const register = async (req, res) => {
+
     const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
     const age = req.body.age;
 
+
     if (!email || !password || !age || !name) {
         return res.status(400).send("Missing email, password, age, or name");
     }
 
+    
+
     try {
+        await authSchema.validateAsync({ name, email, password, age });
         const response = await User.findOne({ 'email': email });
 
         if (response != null) {
@@ -62,8 +74,14 @@ const register = async (req, res) => {
         return res.status(201).send(response2);
 
     } catch (error) {
-        return res.status(400).send(`Error: ${error.message}`);
+        if (error.isJoi === true) {
+            const errorMessage = error.details[0].message; // Extract the error message from the validation error
+            res.status(400).json({ error: errorMessage }); // Return the error message as JSON
+         }
+        else return res.status(400).send(`Error: ${error.message}`);
+       
     }
+
 };
 
 

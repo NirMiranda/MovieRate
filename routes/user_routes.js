@@ -20,7 +20,7 @@ router.post("/",  (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
-    User.putUserById(req,res);});
+    User.updateUserById(req,res);});
 
 router.delete("/:id", (req, res) =>{
     User.deleteUserById(req,res);
@@ -28,4 +28,3 @@ router.delete("/:id", (req, res) =>{
 
 module.exports = router;
 
-/* להתייעץ לגבי ה middleWare*/
