@@ -6,10 +6,10 @@ const getAllMovies = async (req, res) => {
     try {
         let movies = '';
         if (req.query._id) {
-            movies = await find({ _id: req.query._id })
+            movies = await Movie.find({ _id: req.query._id })
         }
         else {
-            movies = await find();
+            movies = await Movie.find();
         }
         res.send(movies);
     } catch (error) {
@@ -27,28 +27,46 @@ const getMovieById = async (req, res) => {
 };
 
 const postMovie = async (req, res) => {
-    console.log("postMovie: ", req.body);
     const movie = new Movie(req.body);
     try {
         await movie.save();
-        res.send("OK")
+        res.send(movie)
+        console.log("postMovie: ", movie);
     } catch (err) {
         console.log(err);
         res.send("failed: " + err.message);
     }
 };
 
-const putMovieById = (req, res) => {
-    res.send("put Movie by  Id: " + req.params._id);
+
+
+const deleteMovieById = async (req, res) => {
+    try {
+        const deletedMovie = await Movie.findByIdAndDelete(req.params._id);
+        if (!deletedMovie) {
+            return res.status(404).send("Movie not found");
+        }
+        res.send("Movie deleted: " + deletedMovie);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
 };
 
-const deleteMovieById = (req, res) => {
-    res.send("delete Movie by name: " + req.params._id);
+const updateMovie = async (req, res) => {
+    const {_id,movieName,year,director,actors,genre,image,description,ratingImdb,reviews,trailer} = req.body;
+    try {
+        const updatedMovie = await Movie.findByIdAndUpdate(_id, { movieName, year, director, actors, genre, image, description, ratingImdb, trailer, reviews }, { new: true });
+        res.send(updatedMovie)
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
+
+
 module.exports= {
     getAllMovies,
     postMovie,
     getMovieById,
-    putMovieById,
     deleteMovieById,
+    updateMovie,
 };
