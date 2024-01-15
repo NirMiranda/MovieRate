@@ -51,8 +51,7 @@ GET http://localhost:3003/movie/getAllMovies
 
 ###
 
-GET http://localhost:3003/movie/getMovieById/659d582f6ead8e3154f03674
-
+ 
 
 ###
 
@@ -64,13 +63,15 @@ POST http://localhost:3003/movie/postMovie
 Content-Type: application/json
 
 {
-    "movieName": "Ilay",
+    "movieName": "movieName",
     "year": 1998,
-    "director": "NirMir",
-    "actors": ["Dodo"],
-    "genre": "Action",
-    "image": "pic",
-    "ratingImdb":9.6
+    "director": "director",
+    "actors": ["actor1", "actor2"],
+    "genre": "genre",
+    "image": "imageURL",
+    "description":"Movie description",
+    "ratingImdb":9.6,
+    "trailer":"trailerURL"
 }
 
 ###

@@ -4,6 +4,7 @@ dotenv.config()
 import mongoose  from 'mongoose'
 import bodyParser from 'body-parser';
 import { Application } from 'express';
+import cors from 'cors';
 
 import userRoute from "./routes/user_routes"
 import authRoute from "./routes/auth_router"
@@ -21,6 +22,7 @@ db.on('error', error=>{console.error(error)})
 
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
