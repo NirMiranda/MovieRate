@@ -5,6 +5,10 @@ GET http://localhost:3003/user
 
 ###
 
+GET http://localhost:3003/user/email?email=dorin1@gmail.com
+
+
+###
 
 POST http://localhost:3003/user
 Content-Type: application/json
