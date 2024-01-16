@@ -24,7 +24,7 @@ Content-Type: application/json
 
 {
     "name" :"dorin cohen",
-    "email": "dorin755@gmail.com",
+    "email": "dorin75555@gmail.com",
     "password":"123456",
     "age":18
 }
@@ -34,7 +34,7 @@ POST http://localhost:3003/auth/login
 Content-Type: application/json
 
 {
-    "email": "Dorin755@gmail.com",
+    "email": "Dorin75555@gmail.com",
     "password":"123456"
     
 }
@@ -42,7 +42,7 @@ Content-Type: application/json
 
 POST http://localhost:3003/auth/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTk1NzA0NjU4NTVkZTA0ZmFhYWY3ZDQiLCJpYXQiOjE3MDQ4OTkxOTh9.6FWGoptG2Te9AJ3i7wU1xQgmOFZw7LD4bnZqIEKkubw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWEwMjUxZWQwMjhkMTdmYWVjN2IwMWYiLCJpYXQiOjE3MDQ5OTQwOTR9.czwo7sKW4UXRB8cAiIN7xdINMA5-jAyp8EOKFFVruug
 ###
 
 ### 
@@ -51,8 +51,7 @@ GET http://localhost:3003/movie/getAllMovies
 
 ###
 
-GET http://localhost:3003/movie/getMovieById/659d582f6ead8e3154f03674
-
+ 
 
 ###
 
@@ -64,13 +63,15 @@ POST http://localhost:3003/movie/postMovie
 Content-Type: application/json
 
 {
-    "movieName": "Ilay",
+    "movieName": "movieName",
     "year": 1998,
-    "director": "NirMir",
-    "actors": ["Dodo"],
-    "genre": "Action",
-    "image": "pic",
-    "ratingImdb":9.6
+    "director": "director",
+    "actors": ["actor1", "actor2"],
+    "genre": "genre",
+    "image": "imageURL",
+    "description":"Movie description",
+    "ratingImdb":9.6,
+    "trailer":"trailerURL"
 }
 
 ###
@@ -109,8 +110,8 @@ Content-Type: application/json
 
 {
     "date": "2021-10-10",
-    "reviewerId": "659570465855de04faaaf7d4",
-    "movieId": "659d5e1fd28a7a04a319843c",
+    "reviewerId": "659ec32ed3d5cc1b566b5a7c",
+    "movieId": "65a02557d028d17faec7b028",
     "rating": 8,
     "image": "imageURL",
     "genre": "Action",
