@@ -51,43 +51,47 @@ const login = async (req: Request, res: Response) => {
 };
 
 const register = async (req: Request, res: Response) => {
-
     const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
     const age = req.body.age;
 
-
     if (!email || !password || !age || !name) {
-        return res.status(400).send("Missing email, password, age, or name");
+        return res.status(400).json({ error: "Missing email, password, age, or name" });
     }
-
-    
 
     try {
         await authSchema.validateAsync({ name, email, password, age });
+
+       
+        if (!isValidString(name)) {
+            return res.status(400).json({ error: "Invalid full name. Please enter only letters." });
+        }
+
         const response = await User.findOne({ 'email': email });
 
         if (response != null) {
-            return res.status(406).send("Email is already registered");
+            return res.status(406).json({ error: "Email is already registered" });
         }
 
         const salt = await bcrypt.genSalt(10);
         const encryptedPassword = await bcrypt.hash(password, salt);
 
         const response2 = await User.create({ 'name': name, 'email': email, 'password': encryptedPassword, 'age': age });
-        return res.status(201).send(response2);
+        return res.status(201).json(response2);
 
     } catch (error: any) {
         if (error.isJoi === true) {
-            const errorMessage = error.details[0].message; // Extract the error message from the validation error
-            res.status(400).json({ error: errorMessage }); // Return the error message as JSON
-         }
-        else return res.status(400).send(`Error: ${error.message}`);
-       
+            const errorMessage = error.details[0].message;
+            return res.status(400).json({ error: errorMessage });
+        } else {
+            return res.status(400).json({ error: `Error: ${error.message}` });
+        }
     }
-
 };
+
+// Function to check if a given value is a valid string only letters
+const isValidString = (value: string): boolean => /^[a-zA-Z]+$/.test(value);
 
 
 interface verifyType extends JwtPayload {

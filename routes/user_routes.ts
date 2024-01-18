@@ -1,31 +1,42 @@
-import Router from "express";
-const router = Router();
+import { Router, Request, Response } from "express";
 import userController from "../controllers/user_controller";
-import { Request,Response } from "express";
-import authMiddleware from '../common/auth_middleware';
 
-// Apply authMiddleware to secure the routes
-router.use(authMiddleware);
+const router = Router();
 
+// Route for getting user by email
+router.get("/email", (req: Request, res: Response) => {
+    console.log("Handling /email route");
+    userController.getUserByEmail(req, res);
+});
+
+// Route for getting all users
 router.get("/", (req: Request, res: Response) => {
-    userController.getAllUsers(req,res);
+    console.log("Handling / route");
+    userController.getAllUsers(req, res);
 });
 
+// Route for getting user by ID
 router.get("/:id", (req: Request, res: Response) => {
-    userController.getUserById(req,res);
+    console.log("Handling /:id route");
+    userController.getUserById(req, res);
 });
 
-
-router.post("/",  (req: Request, res: Response) => {
-    userController.postUser(req,res);
+// Route for posting a new user
+router.post("/", (req: Request, res: Response) => {
+    console.log("Handling POST / route");
+    userController.postUser(req, res);
 });
 
+// Route for updating user by ID
 router.put("/:id", (req: Request, res: Response) => {
-    userController.updateUserById(req,res);});
+    console.log("Handling PUT /:id route");
+    userController.updateUserById(req, res);
+});
 
-router.delete("/:id", (req: Request, res: Response) =>{
-    userController.deleteUserById(req,res);
+// Route for deleting user by ID
+router.delete("/:id", (req: Request, res: Response) => {
+    console.log("Handling DELETE /:id route");
+    userController.deleteUserById(req, res);
 });
 
 export default router;
-

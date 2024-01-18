@@ -21,6 +21,32 @@ const getAllUsers =async (req: Request, res: Response)=>{
     }
 };
 
+
+const getUserByEmail = async (req: Request, res: Response)=>{
+  try {
+    const {email} = req.query; 
+
+    if (!email) {
+      res.status(400).send('Email parameter is missing');
+      return;
+    }
+
+    const user = await User.findOne({ 'email': email });
+
+    if (!user) {
+      res.status(404).send('User not found');
+      return;
+    } else {
+      res.status(200).send(user);
+    }
+  } catch (error) {
+    
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+
+
 const getUserById = async (req: Request, res: Response) => {
     console.log("get user by id: ",req.params.id);
     try {
@@ -33,7 +59,7 @@ const getUserById = async (req: Request, res: Response) => {
 
 const postUser = async (req: Request, res: Response) => {
     try {
-        const { email, password, name, age } = req.body;
+        const { name, email, password, age } = req.body;
         await authSchema.validateAsync({ name, email, password, age }); // Use the validateAsync function from the imported authSchema
 
         const user = new User(req.body);
@@ -41,11 +67,13 @@ const postUser = async (req: Request, res: Response) => {
             await user.save();
             res.send("OK");
         } catch (error: any) {
+            console.log('error1')
             console.log(error);
             res.send("failed: " + error.message);
         }
     } catch (error: any) {
         if (error.isJoi === true) {
+            console.log('error')
            const errorMessage = error.details[0].message; // Extract the error message from the validation error
            res.status(400).json({ error: errorMessage }); // Return the error message as JSON
         }
@@ -111,4 +139,5 @@ export default {
     getUserById,
     updateUserById,
     deleteUserById,
+    getUserByEmail
 };
