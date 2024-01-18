@@ -63,15 +63,15 @@ POST http://localhost:3003/movie/postMovie
 Content-Type: application/json
 
 {
-    "movieName": "movieName",
-    "year": 1998,
-    "director": "director",
-    "actors": ["actor1", "actor2"],
-    "genre": "genre",
-    "image": "imageURL",
-    "description":"Movie description",
-    "ratingImdb":9.6,
-    "trailer":"trailerURL"
+    "movieName": "Killers of the Flower Moon",
+    "year": 2023,
+    "director": "Martin Scorsese",
+    "actors": ["Leonardo DiCaprio", "Robert De Niro"],
+    "genre": "Crime",
+    "image": "https://m.media-amazon.com/images/M/MV5BMjE4ZTZlNDAtM2Q3YS00YjFhLThjN2UtODg2ZGNlN2E2MWU2XkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg",
+    "description":"When oil is discovered in 1920s Oklahoma under Osage Nation land, the Osage people are murdered one by one - until the FBI steps in to unravel the mystery.",
+    "ratingImdb":7.7,
+    "trailer":"https://www.youtube.com/watch?v=EP34Yoxs3FQ"
 }
 
 ###
