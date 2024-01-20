@@ -7,9 +7,6 @@ import { Request,Response,NextFunction } from "express";
 
 
 
-
-
-
 const login = async (req: Request, res: Response) => {
     const email = req.body.email;
     const password = req.body.password;
@@ -40,13 +37,12 @@ const login = async (req: Request, res: Response) => {
 
         await user.save();
 
-        res.status(200).send({ 'accessToken': accessToken, 'refreshToken': refreshToken });
+        res.status(200).send({ 'accessToken': accessToken, 'refreshToken': refreshToken, 'user': user });
     } catch (error: any) {
         if (error.isJoi) {
-            const errorMessage = error.details[0].message; // Extract the error message from the validation error
-            res.status(400).json({ error: errorMessage }); // Return the error message as JSON
-         }
-        else return res.status(400).send(`Error: ${error.message}`);
+            const errorMessage = error.details[0].message;
+            res.status(400).json({ error: errorMessage });
+        } else return res.status(400).send(`Error: ${error.message}`);
     }
 };
 
@@ -90,7 +86,7 @@ const register = async (req: Request, res: Response) => {
     }
 };
 
-// Function to check if a given value is a valid string only letters
+// Function to check if a given value is a valid string only letters)
 const isValidString = (value: string): boolean => /^[a-zA-Z]+$/.test(value);
 
 

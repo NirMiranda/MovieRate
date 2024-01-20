@@ -1,42 +1,46 @@
-import { Router, Request, Response } from "express";
-import userController from "../controllers/user_controller";
-
+import Router from "express";
 const router = Router();
+import userController from "../controllers/user_controller";
+import { Request,Response } from "express";
+import authMiddleware from '../common/auth_middleware';
 
-// Route for getting user by email
-router.get("/email", (req: Request, res: Response) => {
-    console.log("Handling /email route");
-    userController.getUserByEmail(req, res);
-});
 
-// Route for getting all users
+
+
 router.get("/", (req: Request, res: Response) => {
-    console.log("Handling / route");
-    userController.getAllUsers(req, res);
+    userController.getAllUsers(req,res);
 });
 
-// Route for getting user by ID
 router.get("/:id", (req: Request, res: Response) => {
-    console.log("Handling /:id route");
-    userController.getUserById(req, res);
+    userController.getUserById(req,res);
 });
 
-// Route for posting a new user
-router.post("/", (req: Request, res: Response) => {
-    console.log("Handling POST / route");
-    userController.postUser(req, res);
+router.get("/me", authMiddleware, async (req: Request & { userId?: string }, res: Response) => {
+    try {
+        const user = await userController.getUserById(req, res);
+        if (user) {
+            // Return the user details without exposing sensitive information
+            const { id, name, email, age } = user;
+            res.status(200).json({ id, name, email, age });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        console.error('Error retrieving user details:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
 });
 
-// Route for updating user by ID
+router.post("/",  (req: Request, res: Response) => {
+    userController.postUser(req,res);
+});
+
 router.put("/:id", (req: Request, res: Response) => {
-    console.log("Handling PUT /:id route");
-    userController.updateUserById(req, res);
-});
+    userController.updateUserById(req,res);});
 
-// Route for deleting user by ID
-router.delete("/:id", (req: Request, res: Response) => {
-    console.log("Handling DELETE /:id route");
-    userController.deleteUserById(req, res);
+router.delete("/:id", (req: Request, res: Response) =>{
+    userController.deleteUserById(req,res);
 });
 
 export default router;
+

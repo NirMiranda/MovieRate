@@ -38,10 +38,13 @@ POST http://localhost:3003/auth/login
 Content-Type: application/json
 
 {
-    "email": "Dorin75555@gmail.com",
-    "password":"123456"
+    "email": "27dorin12@gmail.com",
+    "password":"12345678"
     
 }
+###
+GET http://localhost:3003/user/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWFiZmYzMzBmN2I3YjIzNmQ3Y2MyYjgiLCJpYXQiOjE3MDU3NzE5NDZ9.1BgHsAEpDvq3Q4nX7lIfEMXcLGpSr4hPjNEDwehliA0
 ###
 
 POST http://localhost:3003/auth/logout

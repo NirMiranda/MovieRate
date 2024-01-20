@@ -2,6 +2,7 @@
 import User, {userType} from "../models/user_model"
 import authSchema from '../models/validation'
 import { Request,Response } from "express";
+import jwt,{ JwtPayload } from 'jsonwebtoken';
 
 
 /*crud*/
@@ -21,6 +22,23 @@ const getAllUsers =async (req: Request, res: Response)=>{
     }
 };
 
+const getUserByToken = async (req: Request, res: Response) => {
+    try {
+        const token = req.body.accessToken; // Assuming the token is sent in the request body
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as { _id: string };
+
+        const user = await User.findById(decoded._id);
+
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+
+        res.status(200).send(user);
+    } catch (error: any) {
+        console.error("Error retrieving user by token:", error.message);
+        res.status(500).send("Failed to retrieve user");
+    }
+};
 
 const getUserByEmail = async (req: Request, res: Response)=>{
   try {
@@ -47,13 +65,15 @@ const getUserByEmail = async (req: Request, res: Response)=>{
 
 
 
-const getUserById = async (req: Request, res: Response) => {
-    console.log("get user by id: ",req.params.id);
+const getUserById = async (req: Request, res: Response): Promise<userType | null> => {
+    console.log("get user by id: ", req.params.id);
     try {
-        const user= await User.findById(req.params.id)
-        res.send(user);
+        const user = await User.findById(req.params.id);
+        return user;
     } catch (error: any) {
-        res.status(500).json({message: error.message})
+        console.error('Error retrieving user by ID:', error.message);
+        res.status(500).json({ message: error.message });
+        return null;
     }
 };
 
@@ -139,5 +159,6 @@ export default {
     getUserById,
     updateUserById,
     deleteUserById,
-    getUserByEmail
+    getUserByEmail,
+    getUserByToken,
 };
