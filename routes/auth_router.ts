@@ -125,7 +125,7 @@ router.post('/login', (req: Request, res: Response) => {
 /**
 * @swagger
 * /auth/logout:
-*   get:
+*   post:
 *     summary: logout a user
 *     tags: [Auth]
 *     description: need to provide the refresh token in the auth header
@@ -145,7 +145,7 @@ router.post('/logout', (req: Request, res: Response) => {
 /**
 * @swagger
 * /auth/refreshToken:
-*   get:
+*   post:
 *     summary: get a new access token using the refresh token
 *     tags: [Auth]
 *     description: need to provide the refresh token in the auth header

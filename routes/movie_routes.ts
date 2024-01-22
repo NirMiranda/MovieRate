@@ -73,7 +73,7 @@ const router = Router();
 
 /**
  * @swagger
- * /movies/getAllMovies:
+ * /movie/getAllMovies:
  *   get:
  *     summary: Get all movies
  *     tags: [Movie]
@@ -85,7 +85,7 @@ router.get("/getAllMovies", movieController.getAllMovies);
 
 /**
  * @swagger
- * /movies/getMovieById/{_id}:
+ * /movie/getMovieById/{_id}:
  *   get:
  *     summary: Get a movie by ID
  *     tags: [Movie]
@@ -104,7 +104,7 @@ router.get("/getMovieById/:_id", movieController.getMovieById);
 
 /**
  * @swagger
- * /movies/postMovie:
+ * /movie/postMovie:
  *   post:
  *     summary: Add a new movie
  *     tags: [Movie]
@@ -122,7 +122,7 @@ router.post("/postMovie", movieController.postMovie);
 
 /**
  * @swagger
- * /movies/updateMovie:
+ * /movie/updateMovie:
  *   post:
  *     summary: Update a movie
  *     tags: [Movie]
@@ -140,7 +140,7 @@ router.post("/updateMovie", movieController.updateMovie);
 
 /**
  * @swagger
- * /movies/deleteMovieById/{_id}:
+ * /movie/deleteMovieById/{_id}:
  *   delete:
  *     summary: Delete a movie by ID
  *     tags: [Movie]

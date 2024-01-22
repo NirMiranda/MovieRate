@@ -59,7 +59,7 @@ const router = Router();
 
 /**
  * @swagger
- * /users/email:
+ * /user/email:
  *   get:
  *     summary: Get user by email
  *     tags: [User]
@@ -80,7 +80,7 @@ router.get("/email", (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /users/:
+ * /user/:
  *   get:
  *     summary: Get all users
  *     tags: [User]
@@ -94,7 +94,7 @@ router.get("/", (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /users/{id}:
+ * /user/{id}:
  *   get:
  *     summary: Get user by ID
  *     tags: [User]
@@ -115,7 +115,7 @@ router.get("/:id", (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /users/:
+ * /user/:
  *   post:
  *     summary: Add a new user
  *     tags: [User]
@@ -135,7 +135,7 @@ router.post("/", (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /users/{id}:
+ * /user/{id}:
  *   put:
  *     summary: Update user by ID
  *     tags: [User]
@@ -162,7 +162,7 @@ router.put("/:id", (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /users/{id}:
+ * /user/{id}:
  *   delete:
  *     summary: Delete user by ID
  *     tags: [User]

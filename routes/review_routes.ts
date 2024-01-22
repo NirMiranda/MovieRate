@@ -60,7 +60,7 @@ const router = Router();
 
 /**
  * @swagger
- * /reviews/getAllReviews:
+ * /review/getAllReviews:
  *   get:
  *     summary: Get all reviews
  *     tags: [Review]
@@ -72,7 +72,7 @@ router.get("/getAllReviews", reviewController.getReviews);
 
 /**
  * @swagger
- * /reviews/getReviewById/{_id}:
+ * /review/getReviewById/{_id}:
  *   get:
  *     summary: Get a review by ID
  *     tags: [Review]
@@ -91,7 +91,7 @@ router.get("/getReviewById/:_id", reviewController.getReviewById);
 
 /**
  * @swagger
- * /reviews/addReview:
+ * /review/addReview:
  *   post:
  *     summary: Add a new review
  *     tags: [Review]
@@ -109,7 +109,7 @@ router.post("/addReview", reviewController.addReviews);
 
 /**
  * @swagger
- * /reviews/updateReview:
+ * /review/updateReview:
  *   post:
  *     summary: Update a review
  *     tags: [Review]
@@ -127,7 +127,7 @@ router.post("/updateReview", reviewController.updateReview);
 
 /**
  * @swagger
- * /reviews/deleteReview/{_id}:
+ * /review/deleteReview/{_id}:
  *   delete:
  *     summary: Delete a review by ID
  *     tags: [Review]
