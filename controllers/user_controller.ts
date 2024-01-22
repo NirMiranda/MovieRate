@@ -1,8 +1,10 @@
 
+import { ObjectId } from "mongoose";
 import User, {userType} from "../models/user_model"
 import authSchema from '../models/validation'
 import { Request,Response } from "express";
 import jwt,{ JwtPayload } from 'jsonwebtoken';
+import bcrypt from "bcryptjs";
 
 
 /*crud*/
@@ -22,23 +24,7 @@ const getAllUsers =async (req: Request, res: Response)=>{
     }
 };
 
-const getUserByToken = async (req: Request, res: Response) => {
-    try {
-        const token = req.body.accessToken; // Assuming the token is sent in the request body
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as { _id: string };
 
-        const user = await User.findById(decoded._id);
-
-        if (!user) {
-            return res.status(404).send("User not found");
-        }
-
-        res.status(200).send(user);
-    } catch (error: any) {
-        console.error("Error retrieving user by token:", error.message);
-        res.status(500).send("Failed to retrieve user");
-    }
-};
 
 const getUserByEmail = async (req: Request, res: Response)=>{
   try {
@@ -65,11 +51,12 @@ const getUserByEmail = async (req: Request, res: Response)=>{
 
 
 
-const getUserById = async (req: Request, res: Response): Promise<userType | null> => {
-    console.log("get user by id: ", req.params.id);
+const getUserById = async (req: Request, res: Response) => {
     try {
+      console.log("get user by id: ", req.params.id);
         const user = await User.findById(req.params.id);
-        return user;
+        console.log(user);
+         res.send(user);
     } catch (error: any) {
         console.error('Error retrieving user by ID:', error.message);
         res.status(500).json({ message: error.message });
@@ -101,30 +88,46 @@ const postUser = async (req: Request, res: Response) => {
 };
 
 const updateUserById = async (req: Request, res: Response) => {
-    try {
-        const { name, email, id, password, age } = req.body;
+  try {
+      const userId = req.params.id;
+      console.log('Update request received for user ID:', userId);
+      const { name, email, password, age } = req.body;
 
-        const user = await User.findById(id); 
+      // Validate name, email, password, and age using authSchema
+      await authSchema.validateAsync({ name, email, password, age });
 
-        if (!user) {
-            return res.status(404).send("User not found");
-        }
+      const user = await User.findById(userId);
 
-        // Update user fields
-        user.name = name;
-        user.email = email;
-        user.id = id;
-        user.password = password;
-        user.age = age;
+      if (!user) {
+          return res.status(404).send('User not found');
+      }
 
-        // Save the changes to the database
-        await user.save();
+      // Update user fields
+      user.name = name;
+      user.email = email;
+      user.age = age;
 
-        res.send("User updated successfully");
-    } catch (error: any) {
-        console.log("Can't update user:", error.message);
-        res.status(500).send("Failed to update user");
-    }
+      // Check if the password is being updated
+      if (password !== undefined && password !== null && password !== '') {
+          // Hash the new password
+          const salt = await bcrypt.genSalt(10);
+          const encryptedPassword = await bcrypt.hash(password, salt);
+          user.password = encryptedPassword;
+      }
+
+      // Save the changes to the database
+      await user.save();
+
+      res.send('User updated successfully');
+  } catch (error: any) {
+      if (error.isJoi === true) {
+          const errorMessage = error.details[0].message;
+          return res.status(400).json({ error: errorMessage });
+      } else {
+          console.log("Can't update user:", error.message);
+          res.status(500).send('Failed to update user');
+      }
+  }
 };
 
 
@@ -150,6 +153,37 @@ const deleteUserById = async (req: Request, res: Response) => {
         res.status(500).send("Failed to delete user");
     }
 };
+interface verifyType extends JwtPayload {
+    _id: string;
+}
+const getUserByToken = async (req: Request, res: Response) => {
+    try {
+      const authHeader = req.headers['authorization'];
+      const refreshToken = authHeader && authHeader.split(' ')[1];
+  
+      if (!refreshToken) {
+        return res.status(401).send("Unauthorized: Missing refreshToken");
+      }
+  
+      const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET as string) as verifyType;
+      console.log("Decoded token payload:", decoded);
+      if (!decoded) {
+        return res.status(401).send("Unauthorized: Invalid refreshToken");
+      }
+      const userId=decoded._id;
+      console.log(userId);
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+  
+      res.status(200).json({ user });
+    } catch (error: any) {
+      console.error("Error retrieving user by refreshToken:", error.message);
+      res.status(500).send("Failed to retrieve user");
+    }
+  };
 
 
 
@@ -160,5 +194,6 @@ export default {
     updateUserById,
     deleteUserById,
     getUserByEmail,
-    getUserByToken,
+    getUserByToken
+    
 };

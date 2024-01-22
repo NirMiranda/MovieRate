@@ -1,11 +1,32 @@
 ###
+POST http://localhost:3003/auth/login
+Content-Type: application/json
 
-GET http://localhost:3003/user
+{
+    "email": "27dorin12@gmail.com",
+    "password":"12345678"
+    
+}
+###
+GET http://localhost:3003/user/token
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWFlYWE5OWY3ZTE0ZWI2ZGRlYTVjN2UiLCJpYXQiOjE3MDU5NDU3NjR9.qdhLcnj-rPAWY3XPiwxmJqVwUlMvMTTh3hZMxcEPQPI
+###
+PUT http://localhost:3003/user/65aeb24b7a78e66d488d2fc6
+Content-Type: application/json
+
+{
+    "name": "dorin",
+    "email": "24dorin12@gmail.com",
+    "password":"1234567899",
+    "age": "19"
+    
+}
+
 
 
 ###
 
-GET http://localhost:3003/user/email?email=dorin1@gmail.com
+GET http://localhost:3003/user/65aeaa99f7e14eb6ddea5c7e
 
 
 ###
@@ -43,8 +64,8 @@ Content-Type: application/json
     
 }
 ###
-GET http://localhost:3003/user/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWFiZmYzMzBmN2I3YjIzNmQ3Y2MyYjgiLCJpYXQiOjE3MDU3NzE5NDZ9.1BgHsAEpDvq3Q4nX7lIfEMXcLGpSr4hPjNEDwehliA0
+GET http://localhost:3003/user/token
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWFkODIyNjg5Y2JhMTk5MWRmOGVlN2IiLCJpYXQiOjE3MDU5Mzg5OTB9.w02DH5eaMNXCps_Jzq4E-wRwZH_W8GDqdm6J6mUNY9E
 ###
 
 POST http://localhost:3003/auth/logout

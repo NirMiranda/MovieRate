@@ -12,7 +12,7 @@ router.post('/login', (req: Request, res: Response) => {
     auth.login(req, res);
 });
 
-// Apply authMiddleware to secure the logout route
+
 router.post('/logout', (req: Request, res: Response) => {
     auth.logout(req, res);
 });
