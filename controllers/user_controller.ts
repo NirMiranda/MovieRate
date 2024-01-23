@@ -87,6 +87,13 @@ const postUser = async (req: Request, res: Response) => {
      }
 };
 
+const extractErrorMessages = (error: any) => {
+  if (error.isJoi === true) {
+      return error.details.map((detail: any) => detail.message).join(', ');
+  }
+  return error.message;
+};
+
 const updateUserById = async (req: Request, res: Response) => {
   try {
       const userId = req.params.id;
@@ -94,7 +101,8 @@ const updateUserById = async (req: Request, res: Response) => {
       const { name, email, password, age } = req.body;
 
       // Validate name, email, password, and age using authSchema
-      await authSchema.validateAsync({ name, email, password, age });
+      const validationObject = { name, email, password, age };
+      await authSchema.validateAsync(validationObject, { abortEarly: false });
 
       const user = await User.findById(userId);
 
@@ -108,28 +116,26 @@ const updateUserById = async (req: Request, res: Response) => {
       user.age = age;
 
       // Check if the password is being updated
-      if (password !== undefined && password !== null && password !== '') {
+      
+      if(password!=null)
+      {
           // Hash the new password
+          console.log("hello")
           const salt = await bcrypt.genSalt(10);
           const encryptedPassword = await bcrypt.hash(password, salt);
           user.password = encryptedPassword;
       }
+      
 
       // Save the changes to the database
       await user.save();
 
       res.send('User updated successfully');
   } catch (error: any) {
-      if (error.isJoi === true) {
-          const errorMessage = error.details[0].message;
-          return res.status(400).json({ error: errorMessage });
-      } else {
-          console.log("Can't update user:", error.message);
-          res.status(500).send('Failed to update user');
-      }
+      const errorMessage = extractErrorMessages(error);
+      return res.status(400).json({ error: errorMessage });
   }
 };
-
 
 const deleteUserById = async (req: Request, res: Response) => {
     try {

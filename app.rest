@@ -11,12 +11,12 @@ Content-Type: application/json
 GET http://localhost:3003/user/token
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWFlYWE5OWY3ZTE0ZWI2ZGRlYTVjN2UiLCJpYXQiOjE3MDU5NDU3NjR9.qdhLcnj-rPAWY3XPiwxmJqVwUlMvMTTh3hZMxcEPQPI
 ###
-PUT http://localhost:3003/user/65aeb24b7a78e66d488d2fc6
+PUT http://localhost:3003/user/65aebb837a78e66d488d2fff
 Content-Type: application/json
 
 {
     "name": "dorin",
-    "email": "24dorin12@gmail.com",
+    "email": "27dorin12@gmail.com",
     "password":"1234567899",
     "age": "19"
     
