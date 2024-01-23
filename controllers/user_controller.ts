@@ -2,6 +2,8 @@
 import { ObjectId } from "mongoose";
 import User, {userType} from "../models/user_model"
 import authSchema from '../models/validation'
+import Review from "../models/review_model";
+import Movie from "../models/movie_model";
 import { Request,Response } from "express";
 import jwt,{ JwtPayload } from 'jsonwebtoken';
 import bcrypt from "bcryptjs";
@@ -178,7 +180,10 @@ const getUserByToken = async (req: Request, res: Response) => {
       }
       const userId=decoded._id;
       console.log(userId);
-      const user = await User.findById(userId);
+      const user = await User.findById(userId).populate({
+        path: 'reviews',
+        model: 'Review',
+      }).exec();;
   
       if (!user) {
         return res.status(404).send("User not found");

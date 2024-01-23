@@ -5,7 +5,7 @@ export type userType = {
     id: string,
     email: string,
     password: string,
-    reviews: string[],
+    reviews: mongoose.Schema.Types.ObjectId[],
     age: number,
     tokens: string[]
 }
@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema<userType>({
     reviews: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "review",
+            ref: "Review",
         }
     ],
     age:{

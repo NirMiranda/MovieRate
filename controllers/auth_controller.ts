@@ -17,7 +17,10 @@ const login = async (req: Request, res: Response) => {
 
     try {
         await authSchema.validateAsync({ email, password });
-        const user = await User.findOne({ 'email': email });
+        const user = await User.findOne({ 'email': email }).populate({
+            path: 'reviews',
+            model: 'Review', // Use the model name you defined for the review model
+        });
 
         if (user == null) {
             return res.status(406).send("Email does not exist");
@@ -87,7 +90,7 @@ const register = async (req: Request, res: Response) => {
 };
 
 // Function to check if a given value is a valid string only letters)
-const isValidString = (value: string): boolean => /^[a-zA-Z]+$/.test(value);
+const isValidString = (value: string): boolean => /^[a-zA-Z\s]+$/.test(value);
 
 
 interface verifyType extends JwtPayload {
@@ -145,7 +148,12 @@ const refreshToken = async (req: IPayload, res: Response, next: NextFunction) =>
         const userId = req._id;
 
         try {
-            const user = await User.findById(userId);
+            const user = await User.findById(userId).populate({
+                path: 'reviews',
+                model: 'Review',
+            }).exec();
+            console.log(user);
+            
             if (user == null) return res.status(403).send('Invalid request');
             if (!user.tokens.includes(token)) {
                 user.tokens = [];
