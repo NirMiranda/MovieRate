@@ -54,130 +54,43 @@
 
 import { Router, Request, Response } from "express";
 import userController from "../controllers/user_controller";
+import { Request, Response } from "express";
 
 const router = Router();
 
-/**
- * @swagger
- * /user/email:
- *   get:
- *     summary: Get user by email
- *     tags: [User]
- *     parameters:
- *       - in: query
- *         name: email
- *         required: true
- *         schema:
- *           type: string
- *         description: Email of the user to retrieve
- *     responses:
- *       200:
- *         description: Returns the details of the user
- */
+// Route for getting user by email
 router.get("/email", (req: Request, res: Response) => {
+    console.log("Handling /email route");
     userController.getUserByEmail(req, res);
 });
 
-/**
- * @swagger
- * /user/:
- *   get:
- *     summary: Get all users
- *     tags: [User]
- *     responses:
- *       200:
- *         description: Returns a list of all users
- */
+// Route for getting all users
 router.get("/", (req: Request, res: Response) => {
+    console.log("Handling / route");
     userController.getAllUsers(req, res);
 });
 
-/**
- * @swagger
- * /user/{id}:
- *   get:
- *     summary: Get user by ID
- *     tags: [User]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: ID of the user to retrieve
- *     responses:
- *       200:
- *         description: Returns the details of the user
- */
+// Route for getting user by ID
 router.get("/:id", (req: Request, res: Response) => {
+    console.log("Handling /:id route");
     userController.getUserById(req, res);
 });
 
-/**
- * @swagger
- * /user/:
- *   post:
- *     summary: Add a new user
- *     tags: [User]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/User'
- *     responses:
- *       200:
- *         description: Returns the details of the newly added user
- */
+// Route for posting a new user
 router.post("/", (req: Request, res: Response) => {
+    console.log("Handling POST / route");
     userController.postUser(req, res);
 });
 
-/**
- * @swagger
- * /user/{id}:
- *   put:
- *     summary: Update user by ID
- *     tags: [User]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: ID of the user to update
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/User'
- *     responses:
- *       200:
- *         description: Returns the details of the updated user
- */
+// Route for updating user by ID
 router.put("/:id", (req: Request, res: Response) => {
+    console.log("Handling PUT /:id route");
     userController.updateUserById(req, res);
 });
 
-/**
- * @swagger
- * /user/{id}:
- *   delete:
- *     summary: Delete user by ID
- *     tags: [User]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: ID of the user to delete
- *     responses:
- *       200:
- *         description: User deleted successfully
- */
+// Route for deleting user by ID
 router.delete("/:id", (req: Request, res: Response) => {
+    console.log("Handling DELETE /:id route");
     userController.deleteUserById(req, res);
 });
 

@@ -7,9 +7,6 @@ import { Request,Response,NextFunction } from "express";
 
 
 
-
-
-
 const login = async (req: Request, res: Response) => {
     const email = req.body.email;
     const password = req.body.password;
@@ -20,7 +17,10 @@ const login = async (req: Request, res: Response) => {
 
     try {
         await authSchema.validateAsync({ email, password });
-        const user = await User.findOne({ 'email': email });
+        const user = await User.findOne({ 'email': email }).populate({
+            path: 'reviews',
+            model: 'Review', // Use the model name you defined for the review model
+        });
 
         if (user == null) {
             return res.status(406).send("Email does not exist");
@@ -40,13 +40,12 @@ const login = async (req: Request, res: Response) => {
 
         await user.save();
 
-        res.status(200).send({ 'accessToken': accessToken, 'refreshToken': refreshToken });
+        res.status(200).send({ 'accessToken': accessToken, 'refreshToken': refreshToken, 'user': user });
     } catch (error: any) {
         if (error.isJoi) {
-            const errorMessage = error.details[0].message; // Extract the error message from the validation error
-            res.status(400).json({ error: errorMessage }); // Return the error message as JSON
-         }
-        else return res.status(400).send(`Error: ${error.message}`);
+            const errorMessage = error.details[0].message;
+            res.status(400).json({ error: errorMessage });
+        } else return res.status(400).send(`Error: ${error.message}`);
     }
 };
 
@@ -90,8 +89,8 @@ const register = async (req: Request, res: Response) => {
     }
 };
 
-// Function to check if a given value is a valid string only letters
-const isValidString = (value: string): boolean => /^[a-zA-Z]+$/.test(value);
+// Function to check if a given value is a valid string only letters)
+const isValidString = (value: string): boolean => /^[a-zA-Z\s]+$/.test(value);
 
 
 interface verifyType extends JwtPayload {
@@ -149,7 +148,12 @@ const refreshToken = async (req: IPayload, res: Response, next: NextFunction) =>
         const userId = req._id;
 
         try {
-            const user = await User.findById(userId);
+            const user = await User.findById(userId).populate({
+                path: 'reviews',
+                model: 'Review',
+            }).exec();
+            console.log(user);
+            
             if (user == null) return res.status(403).send('Invalid request');
             if (!user.tokens.includes(token)) {
                 user.tokens = [];

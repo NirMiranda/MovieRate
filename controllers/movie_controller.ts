@@ -22,6 +22,19 @@ const getMovieById = async (req: Request, res: Response) => {
     console.log("get movie by Id: ", req.params._id);
     try {
         const movie = await Movie.findById(req.params._id)
+            .populate({
+                path: "reviews",
+                populate: {
+                    path: "reviewerId", // Update these paths
+                    model: "Users", // Update these models
+                },
+            }).populate({
+                path: "reviews",
+                populate: {
+                    path: "movieId",
+                    model: "Movie",
+                },
+            });
         res.send(movie);
     } catch (err: any) {
         res.status(500).json({ message: err.message })

@@ -17,7 +17,7 @@ const reviewSchema = new mongoose.Schema<reviewType>({
     },
     reviewerId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "Users"
     },
     movieId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -26,7 +26,7 @@ const reviewSchema = new mongoose.Schema<reviewType>({
     rating: {
         type: Number,
         required: true,
-        min: 0,
+        min: 1,
         max: 10,
     },
     likes: {
