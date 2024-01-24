@@ -3,7 +3,7 @@ const initApp = require("../app");
 const mongoose = require('mongoose');
 const User = require("../models/user_model")
 
-let app;
+const app: any;
 
 beforeAll(async () => {
     app = await initApp();
@@ -42,10 +42,6 @@ test("Get users with one user in the DB", async () => {
     expect(user.isAdmin).toBe(true);
     expect(user.password).toBe("12345678");
     expect(user.age).toBe(18);
-
-
-
-
 });
 test("put user with id", async () => {
     const response = await request(app).put("/user/50302010").send({
@@ -59,10 +55,7 @@ test("put user with id", async () => {
     expect(response.statusCode).toBe(200);
 });
 
-
-/*
-test("delete user with id",async()=>{
-    const response= await request(app).delete("/user/50302010")
+test("delete user with id", async () => {
+    const response = await request(app).delete("/user/50302010")
     expect(response.statusCode).toBe(200);
 });
-*/
