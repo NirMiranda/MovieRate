@@ -54,7 +54,7 @@ const register = async (req: Request, res: Response) => {
     const email = req.body.email;
     const password = req.body.password;
     const age = req.body.age;
-
+    const fileUrl = req.body.fileUrl;
     if (!email || !password || !age || !name) {
         return res.status(400).json({ error: "Missing email, password, age, or name" });
     }
@@ -76,7 +76,7 @@ const register = async (req: Request, res: Response) => {
         const salt = await bcrypt.genSalt(10);
         const encryptedPassword = await bcrypt.hash(password, salt);
 
-        const response2 = await User.create({ 'name': name, 'email': email, 'password': encryptedPassword, 'age': age });
+        const response2 = await User.create({ 'name': name, 'email': email, 'password': encryptedPassword, 'age': age , 'photo': fileUrl});
         return res.status(201).json(response2);
 
     } catch (error: any) {

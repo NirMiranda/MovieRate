@@ -1,6 +1,6 @@
 import express from 'express'
-import dotenv from "dotenv"
-dotenv.config()
+import env from "dotenv";
+env.config();
 import mongoose  from 'mongoose'
 import bodyParser from 'body-parser';
 import { Application } from 'express';
@@ -10,6 +10,7 @@ import userRoute from "./routes/user_routes"
 import authRoute from "./routes/auth_router"
 import movieRoute from "./routes/movie_routes"
 import reviewRoute from "./routes/review_routes"
+import fileRouter from './routes/file_router'
 
 
 const initApp=():Promise<Application>=>{
@@ -32,6 +33,8 @@ app.use("/user",userRoute);
 app.use("/auth",authRoute);
 app.use("/movie",movieRoute);
 app.use("/review",reviewRoute);
+app.use("/file",fileRouter);
+app.use("/public",express.static("public"));
 
 
 resolve(app);
