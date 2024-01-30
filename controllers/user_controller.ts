@@ -66,6 +66,24 @@ const getUserById = async (req: Request, res: Response) => {
     }
 };
 
+const getMoviesByUserId = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id; // Assuming the user ID is passed as a parameter in the request
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    const moviesUploaded = await Movie.find({ uploadedBy: userId });
+
+    res.send(moviesUploaded);
+  } catch (error: any) {
+    console.error("Error retrieving movies by user ID:", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const postUser = async (req: Request, res: Response) => {
     try {
         const { name, email, password, age } = req.body;
@@ -208,6 +226,7 @@ export default {
     updateUserById,
     deleteUserById,
     getUserByEmail,
-    getUserByToken
+    getUserByToken,
+    getMoviesByUserId
     
 };
