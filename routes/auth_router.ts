@@ -7,7 +7,9 @@ import { Request,Response } from "express";
 router.post('/register', (req: Request, res: Response) => {
     auth.register(req, res);
 });
-
+router.post('/google', (req: Request, res: Response) => {
+    auth.googleSignIn(req, res);
+});
 router.post('/login', (req: Request, res: Response) => {
     auth.login(req, res);
 });

@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:3003/user/token
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWFlYWE5OWY3ZTE0ZWI2ZGRlYTVjN2UiLCJpYXQiOjE3MDU5NDU3NjR9.qdhLcnj-rPAWY3XPiwxmJqVwUlMvMTTh3hZMxcEPQPI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWJhNTFlYWYzODY0ZGQ3YzhkYmNkNDUiLCJpYXQiOjE3MDY3MDk0ODJ9.-KiQiNdpydoEqg6ttIfMSQWmcZmYehuATZfC72MF-qg
 ###
 PUT http://localhost:3003/user/65b0e795220aefd4b91ee160
 Content-Type: application/json
