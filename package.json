@@ -4,7 +4,7 @@
   "description": "Web application for users to share their reviews of movies",
   "main": "app.ts",
   "scripts": {
-    "testFile": "jest --detectOpenHandles --forceExit --runInBand ./tests/movies.test.ts",
+    "testFile": "jest --detectOpenHandles --forceExit --runInBand ./tests/reviews.test.ts",
     "devstart": "nodemon server.ts",
     "start": "node server.ts"
   },

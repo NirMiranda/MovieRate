@@ -123,7 +123,7 @@ router.post("/postMovie", movieController.postMovie);
 /**
  * @swagger
  * /movie/updateMovie:
- *   post:
+ *   put:
  *     summary: Update a movie
  *     tags: [Movie]
  *     requestBody:

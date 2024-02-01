@@ -96,7 +96,7 @@ describe("movie tests", () => {
     });
 
 
-    // remove the comment of the delete test to check if the delete works
+    // remove the comment of the delete test to check test
     // test("Test delete movie by id", async () => {
     //     const response = await request(app).delete("/movie/deleteMovieById/65bbb8a57bbdb4f008ab279c")
     //     expect(response.statusCode).toBe(200);

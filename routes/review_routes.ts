@@ -110,7 +110,7 @@ router.post("/addReview", reviewController.addReviews);
 /**
  * @swagger
  * /review/updateReview:
- *   post:
+ *   put:
  *     summary: Update a review
  *     tags: [Review]
  *     requestBody:
@@ -123,8 +123,7 @@ router.post("/addReview", reviewController.addReviews);
  *       200:
  *         description: Returns the details of the updated review
  */
-router.post("/updateReview", reviewController.updateReview);
-
+router.put("/updateReview", reviewController.updateReview);
 /**
  * @swagger
  * /review/deleteReview/{_id}:
