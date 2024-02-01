@@ -22,7 +22,7 @@ describe("movie tests", () => {
     test("Test Get All movies", async () => {
         const response = await request(app).get("/movie/getAllMovies");
         expect(response.statusCode).toBe(200);
-        console.log(response.body);
+        // console.log(response.body);
     });
 
     test("Test Get movie by id", async () => {
@@ -110,7 +110,6 @@ describe("movie tests", () => {
             trailer: "https://www.youtube.com/watch?v=trailer-id",
             uploadedBy: "65ba36489abcec58ab875ee0",
         });
-        console.log(response.body);
         expect(response.statusCode).toBe(200);
         const response1 = await request(app).delete("/movie/deleteMovieById/65ba36489abcec58ab875ee0")
         expect(response1.statusCode).toBe(404);

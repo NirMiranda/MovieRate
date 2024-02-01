@@ -154,4 +154,5 @@ describe("Authentication routes tests", () => {
         expect(response.statusCode).toBe(401);
     });
 
+
 });

@@ -23,7 +23,7 @@ describe("review tests", () => {
     });
 
     test("Test Get Review by id", async () => {
-        const existingReviewId = "65bbb0fc9ee718cd239fb088";
+        const existingReviewId = "65bbd4c0f04eb6d2e28fc0ba";
         const response = await request(app).get(`/review/getReviewById/${existingReviewId}`);
         expect(response.statusCode).toBe(200);
         expect(response.body._id).toBe(existingReviewId);
@@ -62,7 +62,6 @@ describe("review tests", () => {
         const response = await request(app).put("/review/updateReview").send({ ...Review, text: "update comment", });
         expect(response.statusCode).toBe(200);
     });
-    // remove the comment of the delete test to check test
     test("Test delete Review by id", async () => {
         const response = await request(app).post("/review/addReview").send({
             date: '2024-02-01T14:55:56.044Z',
@@ -74,7 +73,6 @@ describe("review tests", () => {
             text: 'delete',
         });
         expect(response.statusCode).toBe(200);
-        console.log(response);
         const response1 = await request(app).delete("/review/deleteReview/65bbb0fc9ee718cd239fb088")
         expect(response1.statusCode).toBe(200);
     });

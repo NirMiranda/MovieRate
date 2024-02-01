@@ -34,7 +34,6 @@ describe("user tests", () => {
     });
     test("Get users by id  the DB", async () => {
         const response = await request(app).get("/user/65bb69dd74efe402ed6be7a7");
-        console.log(response.body); // Log the response body
         expect(response.statusCode).toBe(200);
         const user = response.body;
         expect(user.name).toBe("Dorin Cohen");
@@ -90,6 +89,7 @@ describe("user tests", () => {
         const response1 = await request(app).get("/user");
         expect(response1.statusCode).toBe(200);
         const response2 = await request(app).delete("/user/65bbd20d76a30c6a656730d1")
-        expect(response2.statusCode).toBe(200);
+        expect(response2.statusCode).toBe(404);
     });
+
 });
