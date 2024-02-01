@@ -93,8 +93,8 @@ POST http://localhost:3003/movie/postMovie
 Content-Type: application/json
 
 {
-    "movieName": "Killers of the Flower Moon",
-    "year": 2023,
+    "movieName": "Killers of the Flower Moon4",
+    "year": 2024,
     "director": "Martin Scorsese",
     "actors": ["Leonardo DiCaprio", "Robert De Niro"],
     "genre": "Crime",
@@ -102,7 +102,7 @@ Content-Type: application/json
     "description":"When oil is discovered in 1920s Oklahoma under Osage Nation land, the Osage people are murdered one by one - until the FBI steps in to unravel the mystery.",
     "ratingImdb":7.7,
     "trailer":"https://www.youtube.com/watch?v=EP34Yoxs3FQ",
-    "uploadedBy":"65b7f263b881547c7cf96f05"
+    "uploadedBy":"65ba36489abcec58ab875ee0"
 }
 
 ###
