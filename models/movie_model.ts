@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 export type movieType = {
     movieName: string,
     uploadedBy: mongoose.Schema.Types.ObjectId,

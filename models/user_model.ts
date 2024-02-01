@@ -13,8 +13,6 @@ export type userType = {
     photo: string
 }
 
-
-
 const userSchema = new mongoose.Schema<userType>({
     name: {
         type: String,
