@@ -1,6 +1,6 @@
 import { json } from "body-parser";
-import Movie, {movieType} from "../models/movie_model";
-import { Request,Response } from "express";
+import Movie, { movieType } from "../models/movie_model";
+import { Request, Response } from "express";
 
 
 const getAllMovies = async (req: Request, res: Response) => {
@@ -25,8 +25,8 @@ const getMovieById = async (req: Request, res: Response) => {
             .populate({
                 path: "reviews",
                 populate: {
-                    path: "reviewerId", // Update these paths
-                    model: "Users", // Update these models
+                    path: "reviewerId",
+                    model: "Users",
                 },
             }).populate({
                 path: "reviews",
@@ -66,9 +66,8 @@ const deleteMovieById = async (req: Request, res: Response) => {
         res.status(500).json({ message: err.message });
     }
 };
-
 const updateMovie = async (req: Request, res: Response) => {
-    const {_id,movieName,year,director,actors,genre,image,description,ratingImdb,reviews,trailer} = req.body;
+    const { _id, movieName, year, director, actors, genre, image, description, ratingImdb, reviews, trailer } = req.body;
     try {
         const updatedMovie = await Movie.findByIdAndUpdate(_id, { movieName, year, director, actors, genre, image, description, ratingImdb, trailer, reviews }, { new: true });
         res.send(updatedMovie)
@@ -76,8 +75,6 @@ const updateMovie = async (req: Request, res: Response) => {
         res.status(500).json({ message: error.message });
     }
 };
-
-
 export default {
     getAllMovies,
     postMovie,

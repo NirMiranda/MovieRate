@@ -8,7 +8,8 @@ export type userType = {
     password: string,
     reviews: mongoose.Schema.Types.ObjectId[],
     age: number,
-    tokens: string[]
+    tokens: string[],
+    photo: string
 }
 
 
@@ -44,6 +45,10 @@ const userSchema = new mongoose.Schema<userType>({
     },
     tokens: {
         type: [String]
+    },
+
+    photo: {
+        type: String,
     },
 
 });

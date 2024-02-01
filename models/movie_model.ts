@@ -7,7 +7,6 @@ export type movieType = {
     genre: string,
     image: string,
     description: string,
-    ratingImdb: number,
     reviews: mongoose.Schema.Types.ObjectId[],
     trailer: string
 }
@@ -40,12 +39,12 @@ const movieSchema = new mongoose.Schema<movieType>({
     description: {
         type: String,
     },
-    ratingImdb: {
-        type: Number,
-        required: true,
-        min: 0,
-        max: 10,
-    },
+    // ratingImdb: {
+    //     type: Number,
+    //     required: true,
+    //     min: 0,
+    //     max: 10,
+    // },
     reviews: [
         {
             type: mongoose.Schema.Types.ObjectId,

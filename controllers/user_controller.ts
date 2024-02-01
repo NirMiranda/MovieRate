@@ -102,14 +102,20 @@ const updateUserById = async (req: Request, res: Response) => {
       console.log('Update request received for user ID:', userId);
       const { name, email, password, age } = req.body;
 
-      // Validate name, email, password, and age using authSchema
-      const validationObject = { name, email, password, age };
-      await authSchema.validateAsync(validationObject, { abortEarly: false });
-
       const user = await User.findById(userId);
 
       if (!user) {
           return res.status(404).send('User not found');
+      }
+
+      // Validate name, email, password, and age using authSchema
+      const validationObject = { name, email, password, age };
+
+      try {
+          await authSchema.validateAsync(validationObject, { abortEarly: false });
+      } catch (validationError) {
+          const errorMessage = extractErrorMessages(validationError);
+          return res.status(400).json({ error: errorMessage });
       }
 
       // Update user fields
@@ -118,15 +124,12 @@ const updateUserById = async (req: Request, res: Response) => {
       user.age = age;
 
       // Check if the password is being updated
-      
-      if(password!=null)
-      {
+    
           // Hash the new password
-          console.log("hello")
+          console.log("Updating password");
           const salt = await bcrypt.genSalt(10);
           const encryptedPassword = await bcrypt.hash(password, salt);
           user.password = encryptedPassword;
-      }
       
 
       // Save the changes to the database
@@ -135,7 +138,7 @@ const updateUserById = async (req: Request, res: Response) => {
       res.send('User updated successfully');
   } catch (error: any) {
       const errorMessage = extractErrorMessages(error);
-      return res.status(400).json({ error: errorMessage });
+      return res.status(500).json({ error: errorMessage });
   }
 };
 
