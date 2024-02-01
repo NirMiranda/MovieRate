@@ -5,6 +5,7 @@
   "main": "app.ts",
   "scripts": {
     "testFile": "jest --detectOpenHandles --forceExit --runInBand ./tests/file.test.ts",
+    "testUser": "jest --detectOpenHandles --forceExit --runInBand ./tests/users.test.ts",
     "devstart": "nodemon server.ts",
     "start": "node server.ts"
   },

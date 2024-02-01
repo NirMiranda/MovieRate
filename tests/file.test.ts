@@ -7,7 +7,7 @@ let app: Application;
 
 beforeAll(async () => {
     app = await initApp();
-    console.log("beforeAll");
+    console.log("beforeAll testFile");
 });
 
 afterAll(async () => {
