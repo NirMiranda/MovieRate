@@ -63,9 +63,20 @@ describe("review tests", () => {
         expect(response.statusCode).toBe(200);
     });
     // remove the comment of the delete test to check test
-    // test("Test delete Review by id", async () => {
-    //     const response = await request(app).delete("/review/deleteReview/65bbb0fc9ee718cd239fb088")
-    //     expect(response.statusCode).toBe(200);
-    // });
+    test("Test delete Review by id", async () => {
+        const response = await request(app).post("/review/addReview").send({
+            date: '2024-02-01T14:55:56.044Z',
+            reviewerId: '65ba36489abcec58ab875ee0',
+            movieId: '65ba74775bc238b08fd4e362',
+            rating: 10,
+            likes: 10,
+            image: 'delete.png',
+            text: 'delete',
+        });
+        expect(response.statusCode).toBe(200);
+        console.log(response);
+        const response1 = await request(app).delete("/review/deleteReview/65bbb0fc9ee718cd239fb088")
+        expect(response1.statusCode).toBe(200);
+    });
 });
 

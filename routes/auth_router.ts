@@ -122,6 +122,9 @@ router.post('/login', (req: Request, res: Response) => {
     auth.login(req, res);
 });
 
+router.post('/google', (req: Request, res: Response) => {
+    auth.googleSignIn(req, res);
+});
 /**
 * @swagger
 * /auth/logout:
@@ -159,8 +162,8 @@ router.post('/logout', (req: Request, res: Response) => {
 *               schema:
 *                   $ref: '#/components/schemas/Tokens'
 */
-router.post('/refreshToken', (req: Request, res: Response, next: NextFunction) => {
-    auth.refreshToken(req, res, next);
+router.post('/refreshToken', (req: Request, res: Response) => {
+    auth.refreshToken(req, res);
 });
 
 export default router;

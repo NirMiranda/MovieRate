@@ -97,9 +97,23 @@ describe("movie tests", () => {
 
 
     // remove the comment of the delete test to check test
-    // test("Test delete movie by id", async () => {
-    //     const response = await request(app).delete("/movie/deleteMovieById/65bbb8a57bbdb4f008ab279c")
-    //     expect(response.statusCode).toBe(200);
-    // });
+    test("Test delete movie by id", async () => {
+        const response = await request(app).post("/movie/postMovie").send({
+            movieName: "New Movie test to delete",
+            director: "Director",
+            year: 1948,
+            actors: ["Actor 1", "Actor 2"],
+            genre: "Action",
+            image: "new-movie-test.jpg",
+            description: "Description of the new movie test",
+            reviews: [],
+            trailer: "https://www.youtube.com/watch?v=trailer-id",
+            uploadedBy: "65ba36489abcec58ab875ee0",
+        });
+        console.log(response.body);
+        expect(response.statusCode).toBe(200);
+        const response1 = await request(app).delete("/movie/deleteMovieById/65ba36489abcec58ab875ee0")
+        expect(response1.statusCode).toBe(404);
+    });
 });
 
