@@ -3,7 +3,6 @@ import request from "supertest";
 import mongoose from "mongoose";
 import { Application } from "express";
 
-
 const Review = require("../models/review_model")
 let app: Application;
 
@@ -14,9 +13,7 @@ beforeAll(async () => {
 afterAll(async () => {
     await mongoose.connection.close();
 });
-
 describe("review tests", () => {
-
     test("Test Get All reviews", async () => {
         const response = await request(app).get("/review/getAllReviews");
         expect(response.statusCode).toBe(200);

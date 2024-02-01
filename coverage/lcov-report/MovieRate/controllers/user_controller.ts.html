@@ -296,9 +296,7 @@
 <a name='L231'></a><a href='#L231'>231</a>
 <a name='L232'></a><a href='#L232'>232</a>
 <a name='L233'></a><a href='#L233'>233</a>
-<a name='L234'></a><a href='#L234'>234</a>
-<a name='L235'></a><a href='#L235'>235</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L234'></a><a href='#L234'>234</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -531,39 +529,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
-import { ObjectId } from "mongoose";
-import User, {userType} from "../models/user_model"
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ObjectId } from "mongoose";
+import User, { userType } from "../models/user_model"
 import authSchema from '../models/validation'
 import Review from "../models/review_model";
 import Movie from "../models/movie_model";
-import { Request,Response } from "express";
-import jwt,{ JwtPayload } from 'jsonwebtoken';
+import { Request, Response } from "express";
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import bcrypt from "bcryptjs";
 &nbsp;
 &nbsp;
 /*crud*/
-const getAllUsers =async (req: Request, res: Response)=&gt;{
-    console.log("getAllUsers");
-    try {
-        let users: userType[];
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (req.query.name) {
-<span class="cstat-no" title="statement not covered" >            users= await User.find({name: req.query.name})</span>
-        }
-        else {
-            users = await User.find();
-        }
-        res.send(users);
-    } catch (error: any) {
-<span class="cstat-no" title="statement not covered" >        res.status(500).json({message: error.message})</span>
+const getAllUsers = async (req: Request, res: Response) =&gt; {
+  console.log("getAllUsers");
+  try {
+    let users: userType[];
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (req.query.name) {
+<span class="cstat-no" title="statement not covered" >      users = await User.find({ name: req.query.name })</span>
     }
+    else {
+      users = await User.find();
+    }
+    res.send(users);
+  } catch (error: any) {
+<span class="cstat-no" title="statement not covered" >    res.status(500).json({ message: error.message })</span>
+  }
 };
 &nbsp;
 &nbsp;
 &nbsp;
-const getUserByEmail = <span class="fstat-no" title="function not covered" >async (r</span>eq: Request, res: Response)=&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >{</span></span>
+const getUserByEmail = <span class="fstat-no" title="function not covered" >async (r</span>eq: Request, res: Response) =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > {</span></span>
 <span class="cstat-no" title="statement not covered" >  try {</span>
-    const {email} = <span class="cstat-no" title="statement not covered" >req.query; </span>
+    const { email } = <span class="cstat-no" title="statement not covered" >req.query;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!email) {</span>
 <span class="cstat-no" title="statement not covered" >      res.status(400).send('Email parameter is missing');</span>
@@ -579,7 +576,7 @@ const getUserByEmail = <span class="fstat-no" title="function not covered" >asyn
 <span class="cstat-no" title="statement not covered" >      res.status(200).send(user);</span>
     }
   } catch (error) {
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    res.status(500).send('Internal Server Error');</span>
   }
 };
@@ -588,13 +585,13 @@ const getUserByEmail = <span class="fstat-no" title="function not covered" >asyn
 &nbsp;
 const getUserById = async (req: Request, res: Response) =&gt; {
   try {
-      console.log("get user by id: ", req.params.id);
-      const user = await User.findById(req.params.id);
-      res.send(user);
+    console.log("get user by id: ", req.params.id);
+    const user = await User.findById(req.params.id);
+    res.send(user);
   } catch (error: any) {
-<span class="cstat-no" title="statement not covered" >      console.error('Error retrieving user by ID:', error.message);</span>
-<span class="cstat-no" title="statement not covered" >      res.status(500).json({ message: error.message });</span>
-<span class="cstat-no" title="statement not covered" >      return null;</span>
+<span class="cstat-no" title="statement not covered" >    console.error('Error retrieving user by ID:', error.message);</span>
+<span class="cstat-no" title="statement not covered" >    res.status(500).json({ message: error.message });</span>
+<span class="cstat-no" title="statement not covered" >    return null;</span>
   }
 };
 &nbsp;
@@ -617,154 +614,154 @@ const getMoviesByUserId = <span class="fstat-no" title="function not covered" >a
 };
 &nbsp;
 const postUser = async (req: Request, res: Response) =&gt; {
-    try {
-        const { name, email, password, age } = req.body;
-        await authSchema.validateAsync({ name, email, password, age }); // Use the validateAsync function from the imported authSchema
+  try {
+    const { name, email, password, age } = req.body;
+    await authSchema.validateAsync({ name, email, password, age }); // Use the validateAsync function from the imported authSchema
 &nbsp;
-        const user = new User(req.body);
-        try {
-            await user.save();
-            res.send("OK");
-        } catch (error: any) {
-<span class="cstat-no" title="statement not covered" >            console.log('error1')</span>
-<span class="cstat-no" title="statement not covered" >            console.log(error);</span>
-<span class="cstat-no" title="statement not covered" >            res.send("failed: " + error.message);</span>
-        }
+    const user = new User(req.body);
+    try {
+      await user.save();
+      res.send("OK");
     } catch (error: any) {
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (error.isJoi === true) {</span>
-<span class="cstat-no" title="statement not covered" >            console.log('error')</span>
-           const errorMessage = <span class="cstat-no" title="statement not covered" >error.details[0].message;</span> // Extract the error message from the validation error
-<span class="cstat-no" title="statement not covered" >           res.status(400).json({ error: errorMessage }); </span>// Return the error message as JSON
-        }
-     }
+<span class="cstat-no" title="statement not covered" >      console.log('error1')</span>
+<span class="cstat-no" title="statement not covered" >      console.log(error);</span>
+<span class="cstat-no" title="statement not covered" >      res.send("failed: " + error.message);</span>
+    }
+  } catch (error: any) {
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (error.isJoi === true) {</span>
+<span class="cstat-no" title="statement not covered" >      console.log('error')</span>
+      const errorMessage = <span class="cstat-no" title="statement not covered" >error.details[0].message;</span> // Extract the error message from the validation error
+<span class="cstat-no" title="statement not covered" >      res.status(400).json({ error: errorMessage }); </span>// Return the error message as JSON
+    }
+  }
 };
 &nbsp;
 const extractErrorMessages = (error: any) =&gt; {
   if (error.isJoi === true) {
-      return error.details.map((detail: any) =&gt; detail.message).join(', ');
+    return error.details.map((detail: any) =&gt; detail.message).join(', ');
   }
 <span class="cstat-no" title="statement not covered" >  return error.message;</span>
 };
 &nbsp;
 const updateUserById = async (req: Request, res: Response) =&gt; {
   try {
-      const userId = req.params.id;
-      console.log('Update request received for user ID:', userId);
-      const { name, email, password, age } = req.body;
+    const userId = req.params.id;
+    console.log('Update request received for user ID:', userId);
+    const { name, email, password, age } = req.body;
 &nbsp;
-      const user = await User.findById(userId);
+    const user = await User.findById(userId);
 &nbsp;
-      <span class="missing-if-branch" title="if path not taken" >I</span>if (!user) {
-<span class="cstat-no" title="statement not covered" >          return res.status(404).send('User not found');</span>
-      }
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!user) {
+<span class="cstat-no" title="statement not covered" >      return res.status(404).send('User not found');</span>
+    }
 &nbsp;
-      // Validate name, email, password, and age using authSchema
-      const validationObject = { name, email, password, age };
+    // Validate name, email, password, and age using authSchema
+    const validationObject = { name, email, password, age };
 &nbsp;
-      try {
-          await authSchema.validateAsync(validationObject, { abortEarly: false });
-      } catch (validationError) {
-          const errorMessage = extractErrorMessages(validationError);
-          return res.status(400).json({ error: errorMessage });
-      }
+    try {
+      await authSchema.validateAsync(validationObject, { abortEarly: false });
+    } catch (validationError) {
+      const errorMessage = extractErrorMessages(validationError);
+      return res.status(400).json({ error: errorMessage });
+    }
 &nbsp;
-      // Update user fields
-<span class="cstat-no" title="statement not covered" >      user.name = name;</span>
-<span class="cstat-no" title="statement not covered" >      user.email = email;</span>
-<span class="cstat-no" title="statement not covered" >      user.age = age;</span>
+    // Update user fields
+<span class="cstat-no" title="statement not covered" >    user.name = name;</span>
+<span class="cstat-no" title="statement not covered" >    user.email = email;</span>
+<span class="cstat-no" title="statement not covered" >    user.age = age;</span>
 &nbsp;
-      // Check if the password is being updated
-    
-          // Hash the new password
-<span class="cstat-no" title="statement not covered" >          console.log("Updating password");</span>
-          const salt = <span class="cstat-no" title="statement not covered" >await bcrypt.genSalt(10);</span>
-          const encryptedPassword = <span class="cstat-no" title="statement not covered" >await bcrypt.hash(password, salt);</span>
-<span class="cstat-no" title="statement not covered" >          user.password = encryptedPassword;</span>
-      
+    // Check if the password is being updated
 &nbsp;
-      // Save the changes to the database
-<span class="cstat-no" title="statement not covered" >      await user.save();</span>
+    // Hash the new password
+<span class="cstat-no" title="statement not covered" >    console.log("Updating password");</span>
+    const salt = <span class="cstat-no" title="statement not covered" >await bcrypt.genSalt(10);</span>
+    const encryptedPassword = <span class="cstat-no" title="statement not covered" >await bcrypt.hash(password, salt);</span>
+<span class="cstat-no" title="statement not covered" >    user.password = encryptedPassword;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      res.send('User updated successfully');</span>
+&nbsp;
+    // Save the changes to the database
+<span class="cstat-no" title="statement not covered" >    await user.save();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    res.send('User updated successfully');</span>
   } catch (error: any) {
-      const errorMessage = <span class="cstat-no" title="statement not covered" >extractErrorMessages(error);</span>
-<span class="cstat-no" title="statement not covered" >      return res.status(500).json({ error: errorMessage });</span>
+    const errorMessage = <span class="cstat-no" title="statement not covered" >extractErrorMessages(error);</span>
+<span class="cstat-no" title="statement not covered" >    return res.status(500).json({ error: errorMessage });</span>
   }
 };
 &nbsp;
 const deleteUserById = async (req: Request, res: Response) =&gt; {
-    try {
-        const id = req.params.id;
+  try {
+    const id = req.params.id;
 &nbsp;
-        // Retrieve user details before deletion
-        const user = await User.findById(id);
+    // Retrieve user details before deletion
+    const user = await User.findById(id);
 &nbsp;
-        if (!user) {
-            return res.status(404).send("User not found");
-        }
-&nbsp;
-        // Delete the user
-<span class="cstat-no" title="statement not covered" >        await User.findByIdAndDelete(id);</span>
-&nbsp;
-        // Respond with the deleted user details
-<span class="cstat-no" title="statement not covered" >        res.send("User deleted successfully");</span>
-<span class="cstat-no" title="statement not covered" >        console.log("User deleted:", user);</span>
-    } catch (error: any) {
-<span class="cstat-no" title="statement not covered" >        console.log("Can't delete user:", error.message);</span>
-<span class="cstat-no" title="statement not covered" >        res.status(500).send("Failed to delete user");</span>
+    if (!user) {
+      return res.status(404).send("User not found");
     }
+&nbsp;
+    // Delete the user
+<span class="cstat-no" title="statement not covered" >    await User.findByIdAndDelete(id);</span>
+&nbsp;
+    // Respond with the deleted user details
+<span class="cstat-no" title="statement not covered" >    res.send("User deleted successfully");</span>
+<span class="cstat-no" title="statement not covered" >    console.log("User deleted:", user);</span>
+  } catch (error: any) {
+<span class="cstat-no" title="statement not covered" >    console.log("Can't delete user:", error.message);</span>
+<span class="cstat-no" title="statement not covered" >    res.status(500).send("Failed to delete user");</span>
+  }
 };
 interface verifyType extends JwtPayload {
-    _id: string;
+  _id: string;
 }
 const getUserByToken = <span class="fstat-no" title="function not covered" >async (r</span>eq: Request, res: Response) =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > {</span></span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-      const authHeader = <span class="cstat-no" title="statement not covered" >req.headers['authorization'];</span>
-      const refreshToken = <span class="cstat-no" title="statement not covered" >authHeader &amp;&amp; authHeader.split(' ')[1];</span>
-  
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!refreshToken) {</span>
-<span class="cstat-no" title="statement not covered" >        return res.status(401).send("Unauthorized: Missing refreshToken");</span>
-      }
-  
-      const decoded = <span class="cstat-no" title="statement not covered" >jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET as string) as verifyType;</span>
-<span class="cstat-no" title="statement not covered" >      console.log("Decoded token payload:", decoded);</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!decoded) {</span>
-<span class="cstat-no" title="statement not covered" >        return res.status(401).send("Unauthorized: Invalid refreshToken");</span>
-      }
-      const userId=<span class="cstat-no" title="statement not covered" >decoded._id;</span>
-<span class="cstat-no" title="statement not covered" >      console.log(userId);</span>
-      const user = <span class="cstat-no" title="statement not covered" >await User.findById(userId).populate({</span>
-        path: 'reviews',
-        model: 'Review',
-        populate: {
-          path: 'reviewerId',
-          model: 'Users',
-        },
-      }).exec();
-  
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!user) {</span>
-<span class="cstat-no" title="statement not covered" >        return res.status(404).send("User not found");</span>
-      }
-  
-<span class="cstat-no" title="statement not covered" >      res.status(200).json({ user });</span>
-    } catch (error: any) {
-<span class="cstat-no" title="statement not covered" >      console.error("Error retrieving user by refreshToken:", error.message);</span>
-<span class="cstat-no" title="statement not covered" >      res.status(500).send("Failed to retrieve user");</span>
+<span class="cstat-no" title="statement not covered" >  try {</span>
+    const authHeader = <span class="cstat-no" title="statement not covered" >req.headers['authorization'];</span>
+    const refreshToken = <span class="cstat-no" title="statement not covered" >authHeader &amp;&amp; authHeader.split(' ')[1];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!refreshToken) {</span>
+<span class="cstat-no" title="statement not covered" >      return res.status(401).send("Unauthorized: Missing refreshToken");</span>
     }
-  };
+&nbsp;
+    const decoded = <span class="cstat-no" title="statement not covered" >jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET as string) as verifyType;</span>
+<span class="cstat-no" title="statement not covered" >    console.log("Decoded token payload:", decoded);</span>
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!decoded) {</span>
+<span class="cstat-no" title="statement not covered" >      return res.status(401).send("Unauthorized: Invalid refreshToken");</span>
+    }
+    const userId = <span class="cstat-no" title="statement not covered" >decoded._id;</span>
+<span class="cstat-no" title="statement not covered" >    console.log(userId);</span>
+    const user = <span class="cstat-no" title="statement not covered" >await User.findById(userId).populate({</span>
+      path: 'reviews',
+      model: 'Review',
+      populate: {
+        path: 'reviewerId',
+        model: 'Users',
+      },
+    }).exec();
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!user) {</span>
+<span class="cstat-no" title="statement not covered" >      return res.status(404).send("User not found");</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    res.status(200).json({ user });</span>
+  } catch (error: any) {
+<span class="cstat-no" title="statement not covered" >    console.error("Error retrieving user by refreshToken:", error.message);</span>
+<span class="cstat-no" title="statement not covered" >    res.status(500).send("Failed to retrieve user");</span>
+  }
+};
 &nbsp;
 &nbsp;
 &nbsp;
 export default {
-    getAllUsers,
-    postUser,
-    getUserById,
-    updateUserById,
-    deleteUserById,
-    getUserByEmail,
-    getUserByToken,
-    getMoviesByUserId
-    
+  getAllUsers,
+  postUser,
+  getUserById,
+  updateUserById,
+  deleteUserById,
+  getUserByEmail,
+  getUserByToken,
+  getMoviesByUserId
+&nbsp;
 };</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -772,7 +769,7 @@ export default {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-01T18:52:36.051Z
+                at 2024-02-01T19:20:04.227Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

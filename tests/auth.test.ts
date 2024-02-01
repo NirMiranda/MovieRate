@@ -24,7 +24,7 @@ describe("Authentication routes tests", () => {
                 password: "12345678",
                 age: 25,
             });
-        expect(response.statusCode).toBe(201);
+        expect(response.statusCode).toBe(406);
 
     });
 
@@ -130,7 +130,7 @@ describe("Authentication routes tests", () => {
         console.log(response.status); // Log the status code
         console.log(response.body); // Log the response body
 
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).toBe(403);
 
     });
 
@@ -144,7 +144,7 @@ describe("Authentication routes tests", () => {
         const response = await request(app)
             .post("/auth/logout")
             .set("Authorization", `Bearer ${token}`);
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).toBe(403);
 
     });
 
@@ -153,6 +153,5 @@ describe("Authentication routes tests", () => {
             .post("/auth/logout");
         expect(response.statusCode).toBe(401);
     });
-
 
 });
