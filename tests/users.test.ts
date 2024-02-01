@@ -79,8 +79,17 @@ describe("user tests", () => {
         });
         expect(response.statusCode).toBe(400);
     });
-    // test("delete user with id", async () => {
-    //     const response = await request(app).delete("/user/65bb6fe87e907bb5c0cdbfbe")
-    //     expect(response.statusCode).toBe(200);
-    // });
+    test("delete user with id", async () => {
+        const response = await request(app).post("/user").send({
+            name: "Dorina co",
+            email: "ilay1200@gmail.com",
+            password: "123456789",
+            age: 27,
+        });
+        expect(response.statusCode).toBe(200);
+        const response1 = await request(app).get("/user");
+        expect(response1.statusCode).toBe(200);
+        const response2 = await request(app).delete("/user/65bbd20d76a30c6a656730d1")
+        expect(response2.statusCode).toBe(200);
+    });
 });
