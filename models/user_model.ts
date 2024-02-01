@@ -9,6 +9,7 @@ export type userType = {
     reviews: mongoose.Schema.Types.ObjectId[],
     age: number,
     tokens: string[],
+    moviesUploaded: mongoose.Schema.Types.ObjectId[],
     photo: string
 }
 
@@ -46,7 +47,12 @@ const userSchema = new mongoose.Schema<userType>({
     tokens: {
         type: [String]
     },
-
+    moviesUploaded: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Movie",
+        }
+    ],
     photo: {
         type: String,
     },

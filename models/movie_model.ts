@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 export type movieType = {
     movieName: string,
+    uploadedBy: mongoose.Schema.Types.ObjectId,
     year: number,
     director: string,
     actors: string[],
@@ -10,10 +11,14 @@ export type movieType = {
     reviews: mongoose.Schema.Types.ObjectId[],
     trailer: string
 }
-
 const movieSchema = new mongoose.Schema<movieType>({
     movieName: {
         type: String,
+        required: true
+    },
+    uploadedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Users",
         required: true
     },
     year: {
@@ -39,12 +44,6 @@ const movieSchema = new mongoose.Schema<movieType>({
     description: {
         type: String,
     },
-    // ratingImdb: {
-    //     type: Number,
-    //     required: true,
-    //     min: 0,
-    //     max: 10,
-    // },
     reviews: [
         {
             type: mongoose.Schema.Types.ObjectId,

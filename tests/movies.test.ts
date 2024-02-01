@@ -14,7 +14,8 @@ const Movie1: movieType = {
     image: "new-movie-test.jpg",
     description: "Description of the new movie test ",
     reviews: [],
-    trailer: "https://www.youtube.com/watch?v=trailer-id"
+    trailer: "https://www.youtube.com/watch?v=trailer-id",
+    uploadedBy: new ObjectId,
 };
 const Movie2: movieType = {
     movieName: "Action movie for test",
@@ -26,6 +27,7 @@ const Movie2: movieType = {
     description: "When oil is discovered in 1920s Oklahoma under Osage Nation land, the Osage people are murdered one by one - until the FBI steps in to unravel the mystery.",
     reviews: [],
     trailer: "https://www.youtube.com/watch?v=EP34Yoxs3FQ",
+    uploadedBy: new ObjectId
 };
 
 let app: Application;

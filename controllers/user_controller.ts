@@ -54,16 +54,33 @@ const getUserByEmail = async (req: Request, res: Response)=>{
 
 
 const getUserById = async (req: Request, res: Response) => {
-    try {
+  try {
       console.log("get user by id: ", req.params.id);
-        const user = await User.findById(req.params.id);
-        console.log(user);
-         res.send(user);
-    } catch (error: any) {
-        console.error('Error retrieving user by ID:', error.message);
-        res.status(500).json({ message: error.message });
-        return null;
+      const user = await User.findById(req.params.id);
+      res.send(user);
+  } catch (error: any) {
+      console.error('Error retrieving user by ID:', error.message);
+      res.status(500).json({ message: error.message });
+      return null;
+  }
+};
+
+const getMoviesByUserId = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id; // Assuming the user ID is passed as a parameter in the request
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).send("User not found");
     }
+
+    const moviesUploaded = await Movie.find({ uploadedBy: userId });
+
+    res.send(moviesUploaded);
+  } catch (error: any) {
+    console.error("Error retrieving movies by user ID:", error.message);
+    res.status(500).json({ message: error.message });
+  }
 };
 
 const postUser = async (req: Request, res: Response) => {
@@ -186,7 +203,11 @@ const getUserByToken = async (req: Request, res: Response) => {
       const user = await User.findById(userId).populate({
         path: 'reviews',
         model: 'Review',
-      }).exec();;
+        populate: {
+          path: 'reviewerId',
+          model: 'Users',
+        },
+      }).exec();
   
       if (!user) {
         return res.status(404).send("User not found");
@@ -208,6 +229,7 @@ export default {
     updateUserById,
     deleteUserById,
     getUserByEmail,
-    getUserByToken
+    getUserByToken,
+    getMoviesByUserId
     
 };

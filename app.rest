@@ -101,7 +101,8 @@ Content-Type: application/json
     "image": "https://m.media-amazon.com/images/M/MV5BMjE4ZTZlNDAtM2Q3YS00YjFhLThjN2UtODg2ZGNlN2E2MWU2XkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg",
     "description":"When oil is discovered in 1920s Oklahoma under Osage Nation land, the Osage people are murdered one by one - until the FBI steps in to unravel the mystery.",
     "ratingImdb":7.7,
-    "trailer":"https://www.youtube.com/watch?v=EP34Yoxs3FQ"
+    "trailer":"https://www.youtube.com/watch?v=EP34Yoxs3FQ",
+    "uploadedBy":"65b7f263b881547c7cf96f05"
 }
 
 ###

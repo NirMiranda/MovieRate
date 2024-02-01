@@ -123,7 +123,7 @@ router.post("/postMovie", movieController.postMovie);
 /**
  * @swagger
  * /movie/updateMovie:
- *   post:
+ *   put:
  *     summary: Update a movie
  *     tags: [Movie]
  *     requestBody:
@@ -136,7 +136,8 @@ router.post("/postMovie", movieController.postMovie);
  *       200:
  *         description: Returns the details of the updated movie
  */
-router.post("/updateMovie", movieController.updateMovie);
+
+router.put("/updateMovie", movieController.updateMovie);
 
 /**
  * @swagger
