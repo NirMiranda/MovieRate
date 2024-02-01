@@ -6,6 +6,7 @@
   "scripts": {
     "testFile": "jest --detectOpenHandles --forceExit --runInBand ./tests/file.test.ts",
     "testUser": "jest --detectOpenHandles --forceExit --runInBand ./tests/users.test.ts",
+    "testAuth": "jest --detectOpenHandles --forceExit --runInBand ./tests/auth.test.ts",
     "devstart": "nodemon server.ts",
     "start": "node server.ts"
   },

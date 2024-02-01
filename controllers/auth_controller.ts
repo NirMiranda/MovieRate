@@ -186,41 +186,42 @@ interface IPayload extends Request {
     _id?: string;
 }
 
-const refreshToken = async (req: IPayload, res: Response, next: NextFunction) => {
+const refreshToken = async (req: IPayload, res: Response) => {
     const authHeaders = req.headers['authorization'];
     const token = authHeaders && authHeaders.split(' ')[1];
-    if (token == null) return res.sendStatus(401);
+    
+    if (!token) {
+        return res.sendStatus(401);
+    }
 
-    jwt.verify(token, process.env.REFRESH_TOKEN_SECRET as string, async (error, userInfo) => {
-        if (error) return res.status(403).send(error.message);
+    try {
+        const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET as string) as verifyType;
 
-        const userId = req._id;
-
-        try {
-            const user = await User.findById(userId).populate({
-                path: 'reviews',
-                model: 'Review',
-            }).exec();
-            console.log(user);
-            
-            if (user == null) return res.status(403).send('Invalid request');
-            if (!user.tokens.includes(token)) {
-                user.tokens = [];
-                await user.save();
-                return res.status(403).send('Invalid request');
-            }
-
-            const accessToken = await jwt.sign({ '_id': user._id }, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: process.env.JWT_EXPIRATION });
-            const refreshToken = await jwt.sign({ '_id': user._id }, process.env.REFRESH_TOKEN_SECRET as string);
-
-            user.tokens[user.tokens.indexOf(token)] = refreshToken;
-            await user.save();
-            res.status(200).send({ 'accessToken': accessToken, 'refreshToken': refreshToken });
-
-        } catch (error: any) {
-            res.status(403).send(error.message);
+        if (!decoded) {
+            return res.status(403).send('Invalid token');
         }
-    });
+
+        const userId = decoded._id;
+
+        const user = await User.findById(userId).populate({
+            path: 'reviews',
+            model: 'Review',
+        }).exec();
+
+        if (!user || !user.tokens.includes(token)) {
+            return res.status(403).send('Invalid request');
+        }
+
+        const accessToken = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: process.env.JWT_EXPIRATION });
+        const refreshToken = jwt.sign({ _id: user._id }, process.env.REFRESH_TOKEN_SECRET as string);
+
+        user.tokens[user.tokens.indexOf(token)] = refreshToken;
+        await user.save();
+
+        res.status(200).json({ accessToken, refreshToken });
+    } catch (error) {
+        res.status(403).send(error.message);
+    }
 };
 
 export default { logout, register, login, refreshToken , googleSignIn};

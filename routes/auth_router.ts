@@ -19,8 +19,8 @@ router.post('/logout', (req: Request, res: Response) => {
     auth.logout(req, res);
 });
 
-router.post('/refreshToken', (req: Request, res: Response, next: NextFunction) => {
-    auth.refreshToken(req, res, next);
+router.post('/refreshToken', (req: Request, res: Response) => {
+    auth.refreshToken(req, res);
 });
 
 export default router;
