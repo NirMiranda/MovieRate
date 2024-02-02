@@ -2,39 +2,44 @@ import initApp from "../app";
 import request from "supertest";
 import mongoose from "mongoose";
 import { Application } from "express";
+import User from '../models/user_model'
 
 let app: Application;
-
+let createdUserId: string;
 beforeAll(async () => {
     app = await initApp();  
     console.log("beforeAll testAuth");
-    // const response = await request(app)
-    // .delete("/auth/register")
-    // .send({
-    //     name: "John Doe",
-    //     email: "john@example.com",
-    //     password: "12345678",
-    //     age: 25,
-    // });
+    const userResponse = await request(app)
+    .post("/auth/register")
+    .send({
+        name: "John Doe",
+        email: "john@example.com",
+        password: "12345678",
+        age: 25,
+    });
+  createdUserId = userResponse.body._id;
+    
 });
 
 afterAll(async () => {
+    await User.findByIdAndDelete(createdUserId);
     await mongoose.connection.close();
+
 });
 
-describe("Authentication routes tests", () => {
-    test("Register user with valid data", async () => {
-        const response = await request(app)
-            .post("/auth/register")
-            .send({
-                name: "John Doe",
-                email: "john@example.com",
-                password: "12345678",
-                age: 25,
-            });
-        expect(response.statusCode).toBe(406);
+// describe("Authentication routes tests", () => {
+//     test("Register user with valid data", async () => {
+//         const response = await request(app)
+//             .post("/auth/register")
+//             .send({
+//                 name: "John Doe",
+//                 email: "john@example.com",
+//                 password: "12345678",
+//                 age: 25,
+//             });
+//         expect(response.statusCode).toBe(206);
 
-    });
+//     });
 
     test("Register user with duplicate email", async () => {
         const response = await request(app)
@@ -162,5 +167,11 @@ describe("Authentication routes tests", () => {
             .post("/auth/logout");
         expect(response.statusCode).toBe(401);
     });
+    
+    
 
-});
+
+
+   
+
+

@@ -57,26 +57,7 @@ import userController from "../controllers/user_controller";
 
 const router = Router();
 
-/**
- * @swagger
- * /user/email:
- *   get:
- *     summary: Get user by email
- *     tags: [User]
- *     parameters:
- *       - in: query
- *         name: email
- *         required: true
- *         schema:
- *           type: string
- *         description: Email of the user to retrieve
- *     responses:
- *       200:
- *         description: Returns the details of the user
- */
-router.get("/email", (req: Request, res: Response) => {
-    userController.getUserByEmail(req, res);
-});
+
 
 /**
  * @swagger
@@ -90,6 +71,9 @@ router.get("/email", (req: Request, res: Response) => {
  */
 router.get("/", (req: Request, res: Response) => {
     userController.getAllUsers(req, res);
+});
+router.get("/token", (req: Request, res: Response) => {
+    userController.getUserByToken(req, res);
 });
 
 /**
@@ -117,9 +101,7 @@ router.get("/getMoviesByUserId/:id", (req: Request, res: Response) => {
     userController.getMoviesByUserId(req, res);
 });
 
-router.get("/getMoviesByUserId/:id", (req: Request, res: Response) => {
-    userController.getMoviesByUserId(req, res);
-});
+
 
 /**
  * @swagger

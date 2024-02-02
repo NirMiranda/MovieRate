@@ -2,6 +2,8 @@ import initApp from "../app";
 import request from "supertest";
 import mongoose from "mongoose";
 import { Application } from "express";
+import { Types } from "mongoose";
+const { ObjectId } = Types;
 
 const User = require("../models/user_model")
 let app: Application;
@@ -21,6 +23,13 @@ describe("user tests", () => {
         expect(response.statusCode).toBe(200);
 
     });
+    test("Test Get All users with name", async () => {
+        const userName = "Nir Miranda";
+        const response = await request(app).get(`/user?name=${encodeURIComponent(userName)}`);
+        expect(response.statusCode).toBe(200);
+    });
+    
+    
 
     test("Test post User ", async () => {
         const response = await request(app).post("/user").send({
@@ -41,6 +50,7 @@ describe("user tests", () => {
         expect(user.password).toBe("12345678");
         expect(user.age).toBe(18);
     });
+    
 
     test("put user with id", async () => { //Tests an edge case of inserting a name that is not just made up of characters
         const response = await request(app).put("/user/65bb69dd74efe402ed6be7a7").send({
@@ -85,11 +95,40 @@ describe("user tests", () => {
             password: "123456789",
             age: 27,
         });
+        const user_id = response.body._id;
         expect(response.statusCode).toBe(200);
         const response1 = await request(app).get("/user");
         expect(response1.statusCode).toBe(200);
-        const response2 = await request(app).delete("/user/65bbd20d76a30c6a656730d1")
-        expect(response2.statusCode).toBe(404);
+        const response2 = await request(app).delete(`/user/${user_id}`);
+        expect(response2.statusCode).toBe(200);
+    });
+   
+    test("Get movies by user ID", async () => {
+        const userId = new ObjectId("65bbc24c177507ce1d8eca0f").toString();
+        const response = await request(app).get(`/user/getMoviesByUserId/${userId}`);
+        expect(response.statusCode).toBe(200);
     });
 
+    test("Get movies by uncorrect user ID", async () => {
+        const userId = "65bbc24c177507ce1d8eca"; // Replace with a valid user ID
+        const response = await request(app).get(`/user/getMoviesByUserId/${userId}`);
+        expect(response.statusCode).toBe(500);
+    });
+
+    test("Get user by token with valid token", async () => {
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWI1NTU2ZjRhZTA2NmQ4NDkwOGQ4NTQiLCJpYXQiOjE3MDY4Njg3NjB9._fyw7ZaUgzajPF--YL3IiHtvAEzEzQsWBMhpSEl9Iys";
+        const response = await request(app)
+            .get("/user/token")
+            .set("Authorization", `Bearer ${token}`);
+        expect(response.statusCode).toBe(200);
+    });
+    
+    test("Get user by token with invalid token", async () => {
+        const response = await request(app)
+            .get("/user/token")
+            .set("Authorization", "1234");
+        expect(response.statusCode).toBe(401);
+    });
+    
+    
 });

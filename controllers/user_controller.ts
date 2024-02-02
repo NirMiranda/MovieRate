@@ -27,29 +27,6 @@ const getAllUsers = async (req: Request, res: Response) => {
 
 
 
-const getUserByEmail = async (req: Request, res: Response) => {
-  try {
-    const { email } = req.query;
-
-    if (!email) {
-      res.status(400).send('Email parameter is missing');
-      return;
-    }
-
-    const user = await User.findOne({ 'email': email });
-
-    if (!user) {
-      res.status(404).send('User not found');
-      return;
-    } else {
-      res.status(200).send(user);
-    }
-  } catch (error) {
-
-    res.status(500).send('Internal Server Error');
-  }
-};
-
 
 
 const getUserById = async (req: Request, res: Response) => {
@@ -75,7 +52,7 @@ const getMoviesByUserId = async (req: Request, res: Response) => {
 
     const moviesUploaded = await Movie.find({ uploadedBy: userId });
 
-    res.send(moviesUploaded);
+    res.status(200).send(moviesUploaded);
   } catch (error: any) {
     console.error("Error retrieving movies by user ID:", error.message);
     res.status(500).json({ message: error.message });
@@ -90,7 +67,7 @@ const postUser = async (req: Request, res: Response) => {
     const user = new User(req.body);
     try {
       await user.save();
-      res.send("OK");
+      res.status(200).json(user);
     } catch (error: any) {
       console.log('error1')
       console.log(error);
@@ -227,7 +204,6 @@ export default {
   getUserById,
   updateUserById,
   deleteUserById,
-  getUserByEmail,
   getUserByToken,
   getMoviesByUserId
 
