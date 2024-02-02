@@ -6,8 +6,16 @@ import { Application } from "express";
 let app: Application;
 
 beforeAll(async () => {
-    app = await initApp();
+    app = await initApp();  
     console.log("beforeAll testAuth");
+    // const response = await request(app)
+    // .delete("/auth/register")
+    // .send({
+    //     name: "John Doe",
+    //     email: "john@example.com",
+    //     password: "12345678",
+    //     age: 25,
+    // });
 });
 
 afterAll(async () => {
@@ -121,7 +129,7 @@ describe("Authentication routes tests", () => {
 
 
     test("Refresh token with valid refresh token", async () => {
-        const refreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWJiN2VlNzhlY2U4YWY2MWI4NGFkY2EiLCJpYXQiOjE3MDY3ODY1NzZ9.kQeL-T6GRNyAoFV-fUW76DrHI_dF4rxwe4dCG1sb3xQ"; // Replace with the actual refresh token
+        const refreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWI1NTU2ZjRhZTA2NmQ4NDkwOGQ4NTQiLCJpYXQiOjE3MDYzODI3MDN9.L21YJj-Oa2n7iEMl4nScuVFS8Ww5DGSVory-PvkwE9w"; // Replace with the actual refresh token
     
         const response = await request(app)
             .post("/auth/refreshToken")
@@ -140,7 +148,8 @@ describe("Authentication routes tests", () => {
         expect(response.statusCode).toBe(401);
     });
     test("Logout user with valid credentials", async () => {
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWJiN2VlNzhlY2U4YWY2MWI4NGFkY2EiLCJpYXQiOjE3MDY3ODY2NTN9.4lKrCdRxbbPD0ylTQKIUkrlR5CqKZL6KvRMHAG-kFAA"; 
+        
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWJhMzBjOGU2NDE1YWFlNWIzZjc2YjQiLCJpYXQiOjE3MDY3MDEwMjh9.xyKWKiygyRaRzzWaySk_v1PDuhWj5TQEQffyStIOKZU"; 
         const response = await request(app)
             .post("/auth/logout")
             .set("Authorization", `Bearer ${token}`);
