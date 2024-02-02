@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
+
 export type userType = {
     name: string,
     id: string,
@@ -8,10 +9,9 @@ export type userType = {
     reviews: mongoose.Schema.Types.ObjectId[],
     age: number,
     tokens: string[],
+    moviesUploaded: mongoose.Schema.Types.ObjectId[],
     photo: string
 }
-
-
 
 const userSchema = new mongoose.Schema<userType>({
     name: {
@@ -24,12 +24,12 @@ const userSchema = new mongoose.Schema<userType>({
     email: {
         type: String,
         required: true,
-        lowercase:true,
-        validate:[validator.isEmail,'Please provide an email']
-    },    
-    password:{
-        type:String,
-        required:true
+        lowercase: true,
+        validate: [validator.isEmail, 'Please provide an email']
+    },
+    password: {
+        type: String,
+        required: true
 
     },
     reviews: [
@@ -38,17 +38,23 @@ const userSchema = new mongoose.Schema<userType>({
             ref: "Review",
         }
     ],
-    age:{
+    age: {
         type: Number,
-        required:true
-    }, 
-    tokens :{
-        type :[String]
+        required: true
     },
+    tokens: {
+        type: [String]
+    },
+    moviesUploaded: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Movie",
+        }
+    ],
     photo: {
-        type: String,  // Store the file path or URL of the user's photo
+        type: String,
     },
-    
+
 });
 
 

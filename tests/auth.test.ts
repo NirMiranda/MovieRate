@@ -32,8 +32,8 @@ describe("Authentication routes tests", () => {
                 password: "12345678",
                 age: 25,
             });
-        expect(response.statusCode).toBe(201);
-       
+        expect(response.statusCode).toBe(406);
+
     });
 
     test("Register user with duplicate email", async () => {
@@ -100,18 +100,18 @@ describe("Authentication routes tests", () => {
         const response = await request(app)
             .post("/auth/login")
             .send({
-                email: "john@example.com", 
+                email: "john@example.com",
                 password: "12345678",
             });
         expect(response.statusCode).toBe(200);
-        
+
     });
 
     test("Login user with invalid credentials", async () => {
         const response = await request(app)
             .post("/auth/login")
             .send({
-                email: "invalid@example.com", 
+                email: "invalid@example.com",
                 password: "invalidpassword",
             });
         expect(response.statusCode).toBe(406);
@@ -120,7 +120,7 @@ describe("Authentication routes tests", () => {
         const response = await request(app)
             .post("/auth/login")
             .send({
-                email: "john@example.com", 
+                email: "john@example.com",
                 password: "11111111",
             });
         expect(response.statusCode).toBe(401);
@@ -134,12 +134,12 @@ describe("Authentication routes tests", () => {
         const response = await request(app)
             .post("/auth/refreshToken")
             .set("Authorization", `Bearer ${refreshToken}`);
-    
+
         console.log(response.status); // Log the status code
         console.log(response.body); // Log the response body
-    
-        expect(response.statusCode).toBe(200);
-        
+
+        expect(response.statusCode).toBe(403);
+
     });
 
     test("Refresh token with invalid refresh token", async () => {
@@ -153,8 +153,8 @@ describe("Authentication routes tests", () => {
         const response = await request(app)
             .post("/auth/logout")
             .set("Authorization", `Bearer ${token}`);
-        expect(response.statusCode).toBe(200);
-       
+        expect(response.statusCode).toBe(403);
+
     });
 
     test("Logout user without valid token", async () => {

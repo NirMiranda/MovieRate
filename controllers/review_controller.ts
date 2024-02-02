@@ -67,6 +67,10 @@
                 { _id: deletedReview.movieId },
                 { $pull: { reviews: _id } }
             );
+            await User.updateOne(
+                { _id: deletedReview.reviewerId },
+                { $pull: { reviews: _id } }
+            );
             await Review.findByIdAndDelete(_id);
             res.send("Review deleted")
             console.log("Review deleted");
