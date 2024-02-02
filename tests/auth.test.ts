@@ -27,20 +27,6 @@ afterAll(async () => {
 
 });
 
-// describe("Authentication routes tests", () => {
-//     test("Register user with valid data", async () => {
-//         const response = await request(app)
-//             .post("/auth/register")
-//             .send({
-//                 name: "John Doe",
-//                 email: "john@example.com",
-//                 password: "12345678",
-//                 age: 25,
-//             });
-//         expect(response.statusCode).toBe(206);
-
-//     });
-
     test("Register user with duplicate email", async () => {
         const response = await request(app)
             .post("/auth/register")
