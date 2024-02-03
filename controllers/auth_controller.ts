@@ -41,7 +41,7 @@ const googleSignIn= async(req: Request, res: Response) => {
                     'email':email,
                     'password': "12345678",
                     'photo': payload?.picture,
-                    'age':0,
+                    'age':6,
 
                 });
             }
