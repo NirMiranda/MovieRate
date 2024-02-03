@@ -42,7 +42,7 @@ describe("user tests", () => {
 
     });
     test("Get users by id  the DB", async () => {
-        const response = await request(app).get("/user/65bb69dd74efe402ed6be7a7");
+        const response = await request(app).get("/user/65bdd5bc427047256567d1b6");
         expect(response.statusCode).toBe(200);
         const user = response.body;
         expect(user.name).toBe("Dorin Cohen");
@@ -53,7 +53,7 @@ describe("user tests", () => {
     
 
     test("put user with id", async () => { //Tests an edge case of inserting a name that is not just made up of characters
-        const response = await request(app).put("/user/65bb69dd74efe402ed6be7a7").send({
+        const response = await request(app).put("/user/65bdd5bc427047256567d1b6").send({
             name: "Dorin Cohen3",
             email: "dorin1@gmail.com",
             password: "12345678",
@@ -62,7 +62,7 @@ describe("user tests", () => {
         expect(response.statusCode).toBe(400);
     });
     test("put user with id", async () => { //Tests an edge case of inserting a email that it doesnt email
-        const response = await request(app).put("/user/65bb69dd74efe402ed6be7a7").send({
+        const response = await request(app).put("/user/65bdd5bc427047256567d1b6").send({
             name: "Dorin Cohen",
             email: "dorin1gmail.com",
             password: "12345678",
@@ -71,7 +71,7 @@ describe("user tests", () => {
         expect(response.statusCode).toBe(400);
     });
     test("put user with id", async () => { //Tests an edge case of inserting a password that it doesnt 6 Characters
-        const response = await request(app).put("/user/65bb69dd74efe402ed6be7a7").send({
+        const response = await request(app).put("/user/65bdd5bc427047256567d1b6").send({
             name: "Dorin Cohen",
             email: "dorin1gmail.com",
             password: "123",
@@ -80,7 +80,7 @@ describe("user tests", () => {
         expect(response.statusCode).toBe(400);
     });
     test("put user with id", async () => { //Tests an edge case of inserting a age that it up then 120
-        const response = await request(app).put("/user/65bb69dd74efe402ed6be7a7").send({
+        const response = await request(app).put("/user/65bdd5bc427047256567d1b6").send({
             name: "Dorin Cohen",
             email: "dorin1gmail.com",
             password: "123",
@@ -104,13 +104,13 @@ describe("user tests", () => {
     });
    
     test("Get movies by user ID", async () => {
-        const userId = new ObjectId("65bbc24c177507ce1d8eca0f").toString();
+        const userId = new ObjectId("65bdd5bc427047256567d1b6").toString();
         const response = await request(app).get(`/user/getMoviesByUserId/${userId}`);
         expect(response.statusCode).toBe(200);
     });
 
     test("Get movies by uncorrect user ID", async () => {
-        const userId = "65bbc24c177507ce1d8eca"; // Replace with a valid user ID
+        const userId = "65bbc24c177507ce1d8eca"; 
         const response = await request(app).get(`/user/getMoviesByUserId/${userId}`);
         expect(response.statusCode).toBe(500);
     });

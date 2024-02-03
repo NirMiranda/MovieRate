@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { Application } from "express";
 import User from '../models/user_model'
 import { OAuth2Client } from "google-auth-library";
+import jwt from "jsonwebtoken";
 
 let app: Application;
 let createdUserId: string;
@@ -174,7 +175,82 @@ afterAll(async () => {
         expect(response.statusCode).toBe(400);
     });
     
-    
+    test("Register user with valid credentials", async () => {
+    const response = await request(app)
+        .post("/auth/register")
+        .send({
+            name: "Valid User",
+            email: "validuser@example.com",
+            password: "password123",
+            age: 28,
+        });
+    expect(response.statusCode).toBe(201);
+});
+
+test("Login user with valid credentials and check returned data", async () => {
+    const response = await request(app)
+        .post("/auth/login")
+        .send({
+            email: "validuser@example.com",
+            password: "password123",
+        });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.accessToken).toBeDefined();
+    expect(response.body.refreshToken).toBeDefined();
+    expect(response.body.user).toBeDefined();
+    expect(response.body.user.email).toBe("validuser@example.com");
+});
+
+test("Attempt to register with an existing email", async () => {
+    const response = await request(app)
+        .post("/auth/register")
+        .send({
+            name: "Existing User",
+            email: "validuser@example.com", // Use the email from the previous test
+            password: "password456",
+            age: 30,
+        });
+    expect(response.statusCode).toBe(406);
+});
+
+test("Google Sign-In for an existing user", async () => {
+    // Use the Google credential for the user created in the first Google Sign-In test
+    const credential = "valid_google_credential";
+    const response = await request(app)
+        .post("/auth/google")
+        .send({ credential });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.accessToken).toBeDefined();
+    expect(response.body.refreshToken).toBeDefined();
+    expect(response.body.user).toBeDefined();
+    expect(response.body.user.email).toBe("validuser@example.com");
+});
+
+test("Refresh token with expired refresh token", async () => {
+    // Manually create an expired refresh token for the user
+    const expiredRefreshToken = jwt.sign({ _id: createdUserId }, process.env.REFRESH_TOKEN_SECRET as string, { expiresIn: '1ms' });
+    const response = await request(app)
+        .post("/auth/refreshToken")
+        .set("Authorization", `Bearer ${expiredRefreshToken}`);
+    expect(response.statusCode).toBe(403);
+});
+
+test("Logout user with a valid token", async () => {
+    // Use the refresh token from the first Google Sign-In test
+    const refreshToken = "valid_refresh_token";
+    const response = await request(app)
+        .post("/auth/logout")
+        .set("Authorization", `Bearer ${refreshToken}`);
+    expect(response.statusCode).toBe(200);
+});
+
+test("Logout user with an invalid token", async () => {
+    const invalidToken = "invalid_refresh_token";
+    const response = await request(app)
+        .post("/auth/logout")
+        .set("Authorization", `Bearer ${invalidToken}`);
+    expect(response.statusCode).toBe(403);
+});
 
 
 
