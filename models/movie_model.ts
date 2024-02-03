@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 export type movieType = {
     movieName: string,
     uploadedBy: mongoose.Schema.Types.ObjectId,
@@ -8,11 +9,9 @@ export type movieType = {
     genre: string,
     image: string,
     description: string,
-    ratingImdb: number,
     reviews: mongoose.Schema.Types.ObjectId[],
     trailer: string
 }
-
 const movieSchema = new mongoose.Schema<movieType>({
     movieName: {
         type: String,

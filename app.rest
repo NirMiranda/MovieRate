@@ -9,8 +9,9 @@ Content-Type: application/json
     
 }
 ###
+
 GET http://localhost:3003/user/token
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWJhNTFlYWYzODY0ZGQ3YzhkYmNkNDUiLCJpYXQiOjE3MDY3MDk0ODJ9.-KiQiNdpydoEqg6ttIfMSQWmcZmYehuATZfC72MF-qg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWJiYzI0YzE3NzUwN2NlMWQ4ZWNhMGYiLCJpYXQiOjE3MDY4MDM3ODh9.P2TtVGuMnl_a49xHRSRBcgp1QcEVhfI88oh6wsZqkxg
 ###
 PUT http://localhost:3003/user/65b0e795220aefd4b91ee160
 Content-Type: application/json
@@ -67,12 +68,12 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:3003/user/token
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWFkODIyNjg5Y2JhMTk5MWRmOGVlN2IiLCJpYXQiOjE3MDU5Mzg5OTB9.w02DH5eaMNXCps_Jzq4E-wRwZH_W8GDqdm6J6mUNY9E
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWI1NTU2ZjRhZTA2NmQ4NDkwOGQ4NTQiLCJpYXQiOjE3MDY4Njg3NjB9._fyw7ZaUgzajPF--YL3IiHtvAEzEzQsWBMhpSEl9Iys
 ###
 
 POST http://localhost:3003/auth/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWEwMjUxZWQwMjhkMTdmYWVjN2IwMWYiLCJpYXQiOjE3MDQ5OTQwOTR9.czwo7sKW4UXRB8cAiIN7xdINMA5-jAyp8EOKFFVruug
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWI1NTU2ZjRhZTA2NmQ4NDkwOGQ4NTQiLCJpYXQiOjE3MDY4Njg3NjB9._fyw7ZaUgzajPF--YL3IiHtvAEzEzQsWBMhpSEl9Iys
 ###
 
 ### 
