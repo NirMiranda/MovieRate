@@ -117,10 +117,6 @@ router.get("/getMoviesByUserId/:id", (req: Request, res: Response) => {
     userController.getMoviesByUserId(req, res);
 });
 
-router.get("/getMoviesByUserId/:id", (req: Request, res: Response) => {
-    userController.getMoviesByUserId(req, res);
-});
-
 /**
  * @swagger
  * /user/:

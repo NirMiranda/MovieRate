@@ -122,9 +122,43 @@ router.post('/login', (req: Request, res: Response) => {
     auth.login(req, res);
 });
 
+/**
+* @swagger
+* /auth/google:
+*   post:
+*     summary: Sign in with Google
+*     tags: [Auth]
+*     description: Sign in using Google OAuth2
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               idToken:
+*                 type: string
+*                 description: The Google ID token
+*             required:
+*               - idToken
+*     responses:
+*       200:
+*         description: Authentication successful, returns access & refresh tokens
+*         content:
+*           application/json:
+*             schema:
+*               $ref: '#/components/schemas/Tokens'
+*       400:
+*         description: Bad Request (e.g., missing or invalid ID token)
+*       401:
+*         description: Unauthorized (invalid ID token)
+*       500:
+*         description: Internal Server Error
+*/
 router.post('/google', (req: Request, res: Response) => {
     auth.googleSignIn(req, res);
 });
+
 /**
 * @swagger
 * /auth/logout:
