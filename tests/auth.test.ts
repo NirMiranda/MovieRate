@@ -2,31 +2,32 @@ import initApp from "../app";
 import request from "supertest";
 import mongoose from "mongoose";
 import { Application } from "express";
+import User from '../models/user_model'
+import { OAuth2Client } from "google-auth-library";
+import jwt from "jsonwebtoken";
 
 let app: Application;
-
+let createdUserId: string;
 beforeAll(async () => {
-    app = await initApp();
+    app = await initApp();  
     console.log("beforeAll testAuth");
+    const userResponse = await request(app)
+    .post("/auth/register")
+    .send({
+        name: "John Doe",
+        email: "john@example.com",
+        password: "12345678",
+        age: 25,
+    });
+  createdUserId = userResponse.body._id;
+    
 });
 
 afterAll(async () => {
+    await User.findByIdAndDelete(createdUserId);
     await mongoose.connection.close();
+
 });
-
-describe("Authentication routes tests", () => {
-    test("Register user with valid data", async () => {
-        const response = await request(app)
-            .post("/auth/register")
-            .send({
-                name: "John Doe",
-                email: "john@example.com",
-                password: "12345678",
-                age: 25,
-            });
-        expect(response.statusCode).toBe(406);
-
-    });
 
     test("Register user with duplicate email", async () => {
         const response = await request(app)
@@ -121,8 +122,8 @@ describe("Authentication routes tests", () => {
 
 
     test("Refresh token with valid refresh token", async () => {
-        const refreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWJiN2VlNzhlY2U4YWY2MWI4NGFkY2EiLCJpYXQiOjE3MDY3ODY1NzZ9.kQeL-T6GRNyAoFV-fUW76DrHI_dF4rxwe4dCG1sb3xQ"; // Replace with the actual refresh token
-
+        const refreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWI1NTU2ZjRhZTA2NmQ4NDkwOGQ4NTQiLCJpYXQiOjE3MDYzODI3MDN9.L21YJj-Oa2n7iEMl4nScuVFS8Ww5DGSVory-PvkwE9w"; // Replace with the actual refresh token
+    
         const response = await request(app)
             .post("/auth/refreshToken")
             .set("Authorization", `Bearer ${refreshToken}`);
@@ -140,7 +141,8 @@ describe("Authentication routes tests", () => {
         expect(response.statusCode).toBe(401);
     });
     test("Logout user with valid credentials", async () => {
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWJiN2VlNzhlY2U4YWY2MWI4NGFkY2EiLCJpYXQiOjE3MDY3ODY2NTN9.4lKrCdRxbbPD0ylTQKIUkrlR5CqKZL6KvRMHAG-kFAA";
+        
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWJhMzBjOGU2NDE1YWFlNWIzZjc2YjQiLCJpYXQiOjE3MDY3MDEwMjh9.xyKWKiygyRaRzzWaySk_v1PDuhWj5TQEQffyStIOKZU"; 
         const response = await request(app)
             .post("/auth/logout")
             .set("Authorization", `Bearer ${token}`);
@@ -153,5 +155,105 @@ describe("Authentication routes tests", () => {
             .post("/auth/logout");
         expect(response.statusCode).toBe(401);
     });
+    test("Google Sign-In with valid credentials", async () => {
+        // You need to replace the credential with a valid one for testing
+        const credential = "eyJhbGciOiJSUzI1NiIsImtpZCI6Ijg1ZTU1MTA3NDY2YjdlMjk4MzYxOTljNThjNzU4MWY1YjkyM2JlNDQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI2MjcyMTk3NDM1MjEtOWIwN2dpczJvZmFkaTRuYmoyM3N2MjRlcGUxazVvMjkuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI2MjcyMTk3NDM1MjEtOWIwN2dpczJvZmFkaTRuYmoyM3N2MjRlcGUxazVvMjkuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDMwMjc5ODM0MjgwNTg3NDA4NzMiLCJlbWFpbCI6IjI3ZG9yaW4xMkBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmJmIjoxNzA2ODc4Mjk5LCJuYW1lIjoi15PXldeo15nXnyDXm9eU158iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jS0F5Z3l5bWFYa1dFdHNiMlRPcm9oUTJUUVNEUkQzZWpERHh4R3F6a3o1dVA4PXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IteT15XXqNeZ158iLCJmYW1pbHlfbmFtZSI6Iteb15TXnyIsImxvY2FsZSI6ImhlIiwiaWF0IjoxNzA2ODc4NTk5LCJleHAiOjE3MDY4ODIxOTksImp0aSI6IjNlMWVjNmQxY2ZjOTJjZjY4NzdjNmVkMDQ2ODljODliNmNkMmMwYTIifQ.XfWX1c80poEsLbJ5aYv2d-navu9rVi84nsXkRiTCKO5YcsKHEDX8j9WH2LuRE3o7w79mKewD3-6yzBIeeZZeb8i9UbaTHu3S2NcdCrqZrX_R9H5e9Z8z3gTxAhTu1s81_MqHmPfDHrk8ClIf_NeGZlJEUKIgptNy4eZCtPdu7epvLts7djuizDHkM7ROhxuT7e7N8CMrVOnwrRuW0lYmYUTT15sN8JDIVqzfaoKjg51dMYOAtGQF0aBRqVrGBxDbzNG0n5-oRwp7YjQB0TxQbV4H7mNUoB3pO2bXP3jXxLTtIzT0YzJ3zr8_Y36OzoCLCOLdtI9cboH1z5XjLnC1vw";
+        const response = await request(app)
+            .post("/auth/google")
+            .send({ credential });
+            console.log(response.body);
+        expect(response.statusCode).toBe(200);
+       
+    });
 
+    test("Google Sign-In with invalid credentials", async () => {
+        // You need to replace the invalid credential for testing
+        const invalidCredential = "invalid_google_credential";
+        const response = await request(app)
+            .post("/auth/google")
+            .send({ credential: invalidCredential });
+        expect(response.statusCode).toBe(400);
+    });
+    
+    test("Register user with valid credentials", async () => {
+    const response = await request(app)
+        .post("/auth/register")
+        .send({
+            name: "Valid User",
+            email: "validuser@example.com",
+            password: "password123",
+            age: 28,
+        });
+    expect(response.statusCode).toBe(201);
 });
+
+test("Login user with valid credentials and check returned data", async () => {
+    const response = await request(app)
+        .post("/auth/login")
+        .send({
+            email: "validuser@example.com",
+            password: "password123",
+        });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.accessToken).toBeDefined();
+    expect(response.body.refreshToken).toBeDefined();
+    expect(response.body.user).toBeDefined();
+    expect(response.body.user.email).toBe("validuser@example.com");
+});
+
+test("Attempt to register with an existing email", async () => {
+    const response = await request(app)
+        .post("/auth/register")
+        .send({
+            name: "Existing User",
+            email: "validuser@example.com", // Use the email from the previous test
+            password: "password456",
+            age: 30,
+        });
+    expect(response.statusCode).toBe(406);
+});
+
+test("Google Sign-In for an existing user", async () => {
+    // Use the Google credential for the user created in the first Google Sign-In test
+    const credential = "valid_google_credential";
+    const response = await request(app)
+        .post("/auth/google")
+        .send({ credential });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.accessToken).toBeDefined();
+    expect(response.body.refreshToken).toBeDefined();
+    expect(response.body.user).toBeDefined();
+    expect(response.body.user.email).toBe("validuser@example.com");
+});
+
+test("Refresh token with expired refresh token", async () => {
+    // Manually create an expired refresh token for the user
+    const expiredRefreshToken = jwt.sign({ _id: createdUserId }, process.env.REFRESH_TOKEN_SECRET as string, { expiresIn: '1ms' });
+    const response = await request(app)
+        .post("/auth/refreshToken")
+        .set("Authorization", `Bearer ${expiredRefreshToken}`);
+    expect(response.statusCode).toBe(403);
+});
+
+test("Logout user with a valid token", async () => {
+    // Use the refresh token from the first Google Sign-In test
+    const refreshToken = "valid_refresh_token";
+    const response = await request(app)
+        .post("/auth/logout")
+        .set("Authorization", `Bearer ${refreshToken}`);
+    expect(response.statusCode).toBe(200);
+});
+
+test("Logout user with an invalid token", async () => {
+    const invalidToken = "invalid_refresh_token";
+    const response = await request(app)
+        .post("/auth/logout")
+        .set("Authorization", `Bearer ${invalidToken}`);
+    expect(response.statusCode).toBe(403);
+});
+
+
+
+   
+
+

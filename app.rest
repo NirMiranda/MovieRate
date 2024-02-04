@@ -9,8 +9,9 @@ Content-Type: application/json
     
 }
 ###
+
 GET http://localhost:3003/user/token
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWJhNTFlYWYzODY0ZGQ3YzhkYmNkNDUiLCJpYXQiOjE3MDY3MDk0ODJ9.-KiQiNdpydoEqg6ttIfMSQWmcZmYehuATZfC72MF-qg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWJiYzI0YzE3NzUwN2NlMWQ4ZWNhMGYiLCJpYXQiOjE3MDY4MDM3ODh9.P2TtVGuMnl_a49xHRSRBcgp1QcEVhfI88oh6wsZqkxg
 ###
 PUT http://localhost:3003/user/65b0e795220aefd4b91ee160
 Content-Type: application/json
@@ -67,12 +68,12 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:3003/user/token
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWFkODIyNjg5Y2JhMTk5MWRmOGVlN2IiLCJpYXQiOjE3MDU5Mzg5OTB9.w02DH5eaMNXCps_Jzq4E-wRwZH_W8GDqdm6J6mUNY9E
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWI1NTU2ZjRhZTA2NmQ4NDkwOGQ4NTQiLCJpYXQiOjE3MDY4Njg3NjB9._fyw7ZaUgzajPF--YL3IiHtvAEzEzQsWBMhpSEl9Iys
 ###
 
 POST http://localhost:3003/auth/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWEwMjUxZWQwMjhkMTdmYWVjN2IwMWYiLCJpYXQiOjE3MDQ5OTQwOTR9.czwo7sKW4UXRB8cAiIN7xdINMA5-jAyp8EOKFFVruug
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWI1NTU2ZjRhZTA2NmQ4NDkwOGQ4NTQiLCJpYXQiOjE3MDY4Njg3NjB9._fyw7ZaUgzajPF--YL3IiHtvAEzEzQsWBMhpSEl9Iys
 ###
 
 ### 
@@ -93,8 +94,8 @@ POST http://localhost:3003/movie/postMovie
 Content-Type: application/json
 
 {
-    "movieName": "Killers of the Flower Moon",
-    "year": 2023,
+    "movieName": "Killers of the Flower Moon4",
+    "year": 2024,
     "director": "Martin Scorsese",
     "actors": ["Leonardo DiCaprio", "Robert De Niro"],
     "genre": "Crime",
@@ -102,7 +103,7 @@ Content-Type: application/json
     "description":"When oil is discovered in 1920s Oklahoma under Osage Nation land, the Osage people are murdered one by one - until the FBI steps in to unravel the mystery.",
     "ratingImdb":7.7,
     "trailer":"https://www.youtube.com/watch?v=EP34Yoxs3FQ",
-    "uploadedBy":"65b7f263b881547c7cf96f05"
+    "uploadedBy":"65ba36489abcec58ab875ee0"
 }
 
 ###
