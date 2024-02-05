@@ -11,7 +11,8 @@ import authRoute from './routes/auth_router';
 import movieRoute from './routes/movie_routes';
 import reviewRoute from './routes/review_routes';
 import fileRouter from './routes/file_router';
-
+// import { ServerSocket } from './socket';
+import http from 'http';
 
 const initApp = (): Promise<Application> => {
     const promise = new Promise<Application>(async (resolve, reject) => {
@@ -22,6 +23,9 @@ const initApp = (): Promise<Application> => {
 
 
         const app = express();
+
+        // const HttpServer = http.createServer(app)
+        // new ServerSocket(HttpServer);
 
         app.use(cors());
         app.use(bodyParser.json());
