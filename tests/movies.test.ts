@@ -8,7 +8,7 @@ import { object } from "joi";
 
 const Movie = require("../models/movie_model")
 let app: Application;
-
+let movieId: string;
 beforeAll(async () => {
     app = await initApp();
     console.log("beforeAll testFile");
@@ -26,10 +26,9 @@ describe("movie tests", () => {
     });
 
     test("Test Get movie by id", async () => {
-        const existingMovieId = "65bbb9f9abdb026b311c0830";
-        const response = await request(app).get(`/movie/getMovieById/${existingMovieId}`);
+        const response = await request(app).get("/movie/getMovieById/65c3715717ad8841fb1a9692");
         expect(response.statusCode).toBe(200);
-        expect(response.body._id).toBe(existingMovieId);
+        expect(response.body._id).toBe("65c3715717ad8841fb1a9692");
     });
     test("Test POST Movie", async () => {
         const response = await request(app).post("/movie/postMovie").send({
@@ -115,4 +114,5 @@ describe("movie tests", () => {
         expect(response1.statusCode).toBe(404);
     });
 });
+
 

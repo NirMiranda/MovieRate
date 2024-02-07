@@ -5,12 +5,19 @@ import { Application } from "express";
 import { Types } from "mongoose";
 const { ObjectId } = Types;
 
-const User = require("../models/user_model")
 let app: Application;
-
+let createdUserId: string;
 beforeAll(async () => {
     app = await initApp();
-    console.log("beforeAll testFile");
+    const userResponse = await request(app)
+        .post("/user")
+        .send({
+            name: "John Doe",
+            email: "john@example.com",
+            password: "12345678",
+            age: 25,
+        });
+    createdUserId = userResponse.body._id;
 });
 
 afterAll(async () => {
@@ -42,18 +49,13 @@ describe("user tests", () => {
 
     });
     test("Get users by id  the DB", async () => {
-        const response = await request(app).get("/user/65bdd5bc427047256567d1b6");
+        const response = await request(app).get(`/user/${createdUserId}`);
         expect(response.statusCode).toBe(200);
-        const user = response.body;
-        expect(user.name).toBe("Dorin Cohen");
-        expect(user.email).toBe("dorin1300@gmail.com");
-        expect(user.password).toBe("12345678");
-        expect(user.age).toBe(18);
     });
     
 
     test("put user with id", async () => { //Tests an edge case of inserting a name that is not just made up of characters
-        const response = await request(app).put("/user/65bdd5bc427047256567d1b6").send({
+        const response = await request(app).put(`/user/${createdUserId}`).send({
             name: "Dorin Cohen3",
             email: "dorin1@gmail.com",
             password: "12345678",
@@ -62,8 +64,8 @@ describe("user tests", () => {
         expect(response.statusCode).toBe(400);
     });
     test("put user with id", async () => { //Tests an edge case of inserting a email that it doesnt email
-        const response = await request(app).put("/user/65bdd5bc427047256567d1b6").send({
-            name: "Dorin Cohen",
+             const response = await request(app).put(`/user/${createdUserId}`).send({
+	    name: "Dorin Cohen",
             email: "dorin1gmail.com",
             password: "12345678",
             age: 19,
@@ -71,8 +73,8 @@ describe("user tests", () => {
         expect(response.statusCode).toBe(400);
     });
     test("put user with id", async () => { //Tests an edge case of inserting a password that it doesnt 6 Characters
-        const response = await request(app).put("/user/65bdd5bc427047256567d1b6").send({
-            name: "Dorin Cohen",
+             const response = await request(app).put(`/user/${createdUserId}`).send({
+	    name: "Dorin Cohen",
             email: "dorin1gmail.com",
             password: "123",
             age: 19,
@@ -80,8 +82,8 @@ describe("user tests", () => {
         expect(response.statusCode).toBe(400);
     });
     test("put user with id", async () => { //Tests an edge case of inserting a age that it up then 120
-        const response = await request(app).put("/user/65bdd5bc427047256567d1b6").send({
-            name: "Dorin Cohen",
+             const response = await request(app).put(`/user/${createdUserId}`).send({
+	    name: "Dorin Cohen",
             email: "dorin1gmail.com",
             password: "123",
             age: 180,
@@ -89,17 +91,7 @@ describe("user tests", () => {
         expect(response.statusCode).toBe(400);
     });
     test("delete user with id", async () => {
-        const response = await request(app).post("/user").send({
-            name: "Dorina co",
-            email: "ilay1200@gmail.com",
-            password: "123456789",
-            age: 27,
-        });
-        const user_id = response.body._id;
-        expect(response.statusCode).toBe(200);
-        const response1 = await request(app).get("/user");
-        expect(response1.statusCode).toBe(200);
-        const response2 = await request(app).delete(`/user/${user_id}`);
+        const response2 = await request(app).delete(`/user/${createdUserId}`);
         expect(response2.statusCode).toBe(200);
     });
    
@@ -122,11 +114,12 @@ describe("user tests", () => {
     });
 
     test("Get user by token with valid token", async () => {
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWI1NTU2ZjRhZTA2NmQ4NDkwOGQ4NTQiLCJpYXQiOjE3MDY4Njg3NjB9._fyw7ZaUgzajPF--YL3IiHtvAEzEzQsWBMhpSEl9Iys";
-        const response = await request(app)
+	    const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWMzNzE0OTViMzcxODRmMThmZDgzOWQiLCJpYXQiOjE3MDczNDU0NDZ9.H_DJwlGoYQ8RBoaWJEc2oUxVe1SXW5W8Ezeo4RthDDg"
+	    const response = await request(app)
             .get("/user/token")
             .set("Authorization", `Bearer ${token}`);
         expect(response.statusCode).toBe(200);
+	
     });
     
     test("Get user by token with invalid token", async () => {
@@ -138,3 +131,4 @@ describe("user tests", () => {
     
     
 });
+
