@@ -29,8 +29,8 @@ const startServer = async () => {
 
         const port = process.env.PORT;
         const options2= {
-            key: fs.readFileSync('client-key.pem'),
-            cert: fs.readFileSync('client-cert.pem')
+            key: fs.readFileSync('../client-key.pem'),
+            cert: fs.readFileSync('../client-cert.pem')
         }
         const server = https.createServer(options2, app);
         const io = new Server(server); // Initialize Socket.io server
