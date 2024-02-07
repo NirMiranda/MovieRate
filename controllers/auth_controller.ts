@@ -4,11 +4,57 @@ import bcrypt from "bcryptjs";
 import jwt,{ JwtPayload } from 'jsonwebtoken';
 import authSchema from '../models/validation';
 import { Request,Response,NextFunction } from "express";
+import { OAuth2Client } from "google-auth-library";
+import {userType} from "../models/user_model"
+import { Document } from "mongoose";
 
+const client= new OAuth2Client();
 
+const genertToken=async (user: Document & userType)=>{
+    const accessToken = await jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: process.env.JWT_EXPIRATION });
+    const refreshToken = await jwt.sign({ _id: user._id }, process.env.REFRESH_TOKEN_SECRET as string);
 
+    if (user.tokens == null) user.tokens = [refreshToken];
+    else user.tokens.push(refreshToken);
 
+    await user.save();
+    return {
+        'accessToken':accessToken,
+        'refreshToken': refreshToken,
+    };
+}
+const googleSignIn= async(req: Request, res: Response) => {
+    try{
+        const ticket= await client.verifyIdToken({
+            idToken: req.body.credential,
+            audience:process.env.GOOGLE_CLIENT_ID,
+        
+          });
+          const payload=ticket.getPayload();
+          const email=payload?.email;
+          if(email!=null)
+          {
+            let user= await User.findOne({'email': email});
+            if(user==null){
+                user= await User.create({
+                    'name': payload?.name,
+                    'email':email,
+                    'password': "12345678",
+                    'photo': payload?.picture,
+                    'age':6,
 
+                });
+            }
+
+           const response=await genertToken(user);
+           res.status(200).send({user, ...response});
+          }
+         
+    }catch(error){
+      return res.status(400).json(error.message);
+    }
+  
+}
 
 const login = async (req: Request, res: Response) => {
     const email = req.body.email;
@@ -20,7 +66,10 @@ const login = async (req: Request, res: Response) => {
 
     try {
         await authSchema.validateAsync({ email, password });
-        const user = await User.findOne({ 'email': email });
+        const user = await User.findOne({ 'email': email }).populate({
+            path: 'reviews',
+            model: 'Review', // Use the model name you defined for the review model
+        });
 
         if (user == null) {
             return res.status(406).send("Email does not exist");
@@ -40,13 +89,12 @@ const login = async (req: Request, res: Response) => {
 
         await user.save();
 
-        res.status(200).send({ 'accessToken': accessToken, 'refreshToken': refreshToken });
+        res.status(200).send({ 'accessToken': accessToken, 'refreshToken': refreshToken, 'user': user });
     } catch (error: any) {
         if (error.isJoi) {
-            const errorMessage = error.details[0].message; // Extract the error message from the validation error
-            res.status(400).json({ error: errorMessage }); // Return the error message as JSON
-         }
-        else return res.status(400).send(`Error: ${error.message}`);
+            const errorMessage = error.details[0].message;
+            res.status(400).json({ error: errorMessage });
+        } else return res.status(400).send(`Error: ${error.message}`);
     }
 };
 
@@ -55,7 +103,7 @@ const register = async (req: Request, res: Response) => {
     const email = req.body.email;
     const password = req.body.password;
     const age = req.body.age;
-
+    const fileUrl = req.body.fileUrl;
     if (!email || !password || !age || !name) {
         return res.status(400).json({ error: "Missing email, password, age, or name" });
     }
@@ -77,7 +125,7 @@ const register = async (req: Request, res: Response) => {
         const salt = await bcrypt.genSalt(10);
         const encryptedPassword = await bcrypt.hash(password, salt);
 
-        const response2 = await User.create({ 'name': name, 'email': email, 'password': encryptedPassword, 'age': age });
+        const response2 = await User.create({ 'name': name, 'email': email, 'password': encryptedPassword, 'age': age , 'photo': fileUrl});
         return res.status(201).json(response2);
 
     } catch (error: any) {
@@ -90,8 +138,8 @@ const register = async (req: Request, res: Response) => {
     }
 };
 
-// Function to check if a given value is a valid string only letters
-const isValidString = (value: string): boolean => /^[a-zA-Z]+$/.test(value);
+// Function to check if a given value is a valid string only letters)
+const isValidString = (value: string): boolean => /^[a-zA-Z\s]+$/.test(value);
 
 
 interface verifyType extends JwtPayload {
@@ -138,36 +186,42 @@ interface IPayload extends Request {
     _id?: string;
 }
 
-const refreshToken = async (req: IPayload, res: Response, next: NextFunction) => {
+const refreshToken = async (req: IPayload, res: Response) => {
     const authHeaders = req.headers['authorization'];
     const token = authHeaders && authHeaders.split(' ')[1];
-    if (token == null) return res.sendStatus(401);
+    
+    if (!token) {
+        return res.sendStatus(401);
+    }
 
-    jwt.verify(token, process.env.REFRESH_TOKEN_SECRET as string, async (error, userInfo) => {
-        if (error) return res.status(403).send(error.message);
+    try {
+        const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET as string) as verifyType;
 
-        const userId = req._id;
-
-        try {
-            const user = await User.findById(userId);
-            if (user == null) return res.status(403).send('Invalid request');
-            if (!user.tokens.includes(token)) {
-                user.tokens = [];
-                await user.save();
-                return res.status(403).send('Invalid request');
-            }
-
-            const accessToken = await jwt.sign({ '_id': user._id }, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: process.env.JWT_EXPIRATION });
-            const refreshToken = await jwt.sign({ '_id': user._id }, process.env.REFRESH_TOKEN_SECRET as string);
-
-            user.tokens[user.tokens.indexOf(token)] = refreshToken;
-            await user.save();
-            res.status(200).send({ 'accessToken': accessToken, 'refreshToken': refreshToken });
-
-        } catch (error: any) {
-            res.status(403).send(error.message);
+        if (!decoded) {
+            return res.status(403).send('Invalid token');
         }
-    });
+
+        const userId = decoded._id;
+
+        const user = await User.findById(userId).populate({
+            path: 'reviews',
+            model: 'Review',
+        }).exec();
+
+        if (!user || !user.tokens.includes(token)) {
+            return res.status(403).send('Invalid request');
+        }
+
+        const accessToken = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: process.env.JWT_EXPIRATION });
+        const refreshToken = jwt.sign({ _id: user._id }, process.env.REFRESH_TOKEN_SECRET as string);
+
+        user.tokens[user.tokens.indexOf(token)] = refreshToken;
+        await user.save();
+
+        res.status(200).json({ accessToken, refreshToken });
+    } catch (error) {
+        res.status(403).send(error.message);
+    }
 };
 
-export default { logout, register, login, refreshToken };
+export default { logout, register, login, refreshToken , googleSignIn};

@@ -1,6 +1,7 @@
 import { json } from "body-parser";
-import Movie, {movieType} from "../models/movie_model";
-import { Request,Response } from "express";
+import Movie, { movieType } from "../models/movie_model";
+import User from "../models/user_model";
+import { Request, Response } from "express";
 
 
 const getAllMovies = async (req: Request, res: Response) => {
@@ -22,6 +23,22 @@ const getMovieById = async (req: Request, res: Response) => {
     console.log("get movie by Id: ", req.params._id);
     try {
         const movie = await Movie.findById(req.params._id)
+            .populate({
+                path: "reviews",
+                populate: {
+                    path: "reviewerId",
+                    model: "Users",
+                },
+            }).populate({
+                path: "reviews",
+                populate: {
+                    path: "movieId",
+                    model: "Movie",
+                },
+            }).populate({
+                path: "uploadedBy",
+                model: "Users",
+            })
         res.send(movie);
     } catch (err: any) {
         res.status(500).json({ message: err.message })
@@ -53,18 +70,15 @@ const deleteMovieById = async (req: Request, res: Response) => {
         res.status(500).json({ message: err.message });
     }
 };
-
 const updateMovie = async (req: Request, res: Response) => {
-    const {_id,movieName,year,director,actors,genre,image,description,ratingImdb,reviews,trailer} = req.body;
+    const { _id, movieName, year, director, actors, genre, image, description, reviews, trailer } = req.body;
     try {
-        const updatedMovie = await Movie.findByIdAndUpdate(_id, { movieName, year, director, actors, genre, image, description, ratingImdb, trailer, reviews }, { new: true });
+        const updatedMovie = await Movie.findByIdAndUpdate(_id, { movieName, year, director, actors, genre, image, description, trailer, reviews }, { new: true });
         res.send(updatedMovie)
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
 };
-
-
 export default {
     getAllMovies,
     postMovie,

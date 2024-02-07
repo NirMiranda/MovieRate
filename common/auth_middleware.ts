@@ -1,31 +1,21 @@
-
-// authMiddleware.js
-
-const jwt = require('jsonwebtoken');
-const User = require('../models/user_model');
-import { Request,Response,NextFunction  } from "express";
-
+import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
 
 const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-        return res.sendStatus(401);
+        return res.status(401).send({ error: 'Unauthorized' });
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        const user = await User.findById(decoded._id);
-
-        if (!user) {
-            return res.sendStatus(401);
-        }
-
-        
+        const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET as string) as { userId: string };
+        (req as any).userId = decoded.userId; // Use type assertion to avoid TypeScript error
+        console.log((req as any).userId);
         next();
-    } catch (err) {
-        return res.sendStatus(401);
+    } catch (error) {
+        res.status(401).send({ error: 'Unauthorized' });
     }
 };
 
