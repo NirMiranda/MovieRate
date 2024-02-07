@@ -104,8 +104,14 @@ describe("user tests", () => {
     });
    
     test("Get movies by user ID", async () => {
-        const userId = new ObjectId("65bdd5bc427047256567d1b6").toString();
-        const response = await request(app).get(`/user/getMoviesByUserId/${userId}`);
+        const response2= await request(app).post("/user").send({
+            name: "Dorina co",
+            email: "ilay1200@gmail.com",
+            password: "123456789",
+            age: 27,
+        });
+        const user_id = response2.body._id;
+        const response = await request(app).get(`/user/getMoviesByUserId/${user_id}`);
         expect(response.statusCode).toBe(200);
     });
 
