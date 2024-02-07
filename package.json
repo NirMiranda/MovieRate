@@ -7,7 +7,7 @@
     "test": "jest --detectOpenHandles --coverage --forceExit",
     "devstart": "nodemon server.ts",
     "start": "tsc && ts-node server.ts",
-    "prod1": "cp .envprod .env && tsc -p tsconfig_prod.json && ts-node server.ts"
+    "prod1": "cp .envprod .env && tsc -p tsconfig_prod.json && pm2 restart ecosystem.config.js --env production"
   },
   "author": "",
   "license": "ISC",
