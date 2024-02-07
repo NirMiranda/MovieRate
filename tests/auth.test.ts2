@@ -1,0 +1,251 @@
+import initApp from "../app";
+import request from "supertest";
+import mongoose from "mongoose";
+import { Application } from "express";
+import User from '../models/user_model'
+import { OAuth2Client } from "google-auth-library";
+import jwt from "jsonwebtoken";
+
+let app: Application;
+let createdUserId: string;
+let refreshToken: string;
+beforeAll(async () => {
+    app = await initApp();
+    console.log("beforeAll testAuth");
+    const userResponse = await request(app)
+        .post("/auth/register")
+        .send({
+            name: "John Doe",
+            email: "john@example.com",
+            password: "12345678",
+            age: 25,
+        });
+    createdUserId = userResponse.body._id;
+    const loginResponse = await request(app)
+        .post("/auth/login")
+        .send({
+            email: "john@example.com",
+            password: "12345678"
+        });
+    refreshToken = loginResponse.refreshToken;
+
+});
+
+afterAll(async () => {
+    await User.findByIdAndDelete(createdUserId);
+    await mongoose.connection.close();
+
+});
+
+test("Register user with duplicate email", async () => {
+    const response = await request(app)
+        .post("/auth/register")
+        .send({
+            name: "Duplicate User",
+            email: "john@example.com", // Use the same email as in the previous test
+            password: "12345678",
+            age: 30,
+        });
+    expect(response.statusCode).toBe(406); // Assuming you return 406 for duplicate registration
+});
+
+test("Register user with invalid name", async () => {
+    const response = await request(app)
+        .post("/auth/register")
+        .send({
+            name: "123 Invalid Name",
+            email: "invalid@example.com",
+            password: "12345678",
+            age: 40,
+        });
+    expect(response.statusCode).toBe(400);
+});
+
+test("Register user with invalid email", async () => {
+    const response = await request(app)
+        .post("/auth/register")
+        .send({
+            name: "Invalid Email",
+            email: "invalidemail", // Invalid email format
+            password: "12345678",
+            age: 50,
+        });
+    expect(response.statusCode).toBe(400);
+});
+
+test("Register user with invalid age", async () => {
+    const response = await request(app)
+        .post("/auth/register")
+        .send({
+            name: "Invalid Age",
+            email: "age@example.com",
+            password: "12345678",
+            age: 150, // Age out of range
+        });
+    expect(response.statusCode).toBe(400);
+});
+
+test("Register user with invalid password", async () => {
+    const response = await request(app)
+        .post("/auth/register")
+        .send({
+            name: "Invalid Password",
+            email: "password@example.com",
+            password: "123", // Password less than 6 characters
+            age: 30,
+        });
+    expect(response.statusCode).toBe(400);
+});
+
+test("Login user with valid credentials", async () => {
+    const response = await request(app)
+        .post("/auth/login")
+        .send({
+            email: "john@example.com",
+            password: "12345678",
+        });
+    expect(response.statusCode).toBe(200);
+
+});
+
+test("Login user with invalid credentials", async () => {
+    const response = await request(app)
+        .post("/auth/login")
+        .send({
+            email: "invalid@example.com",
+            password: "invalidpassword",
+        });
+    expect(response.statusCode).toBe(406);
+});
+test("Login user with uncorrected credentials", async () => {
+    const response = await request(app)
+        .post("/auth/login")
+        .send({
+            email: "john@example.com",
+            password: "11111111",
+        });
+    expect(response.statusCode).toBe(401);
+});
+
+
+
+test("Refresh token with valid refresh token", async () => {
+    const response = await request(app)
+        .post("/auth/refreshToken")
+        .set("Authorization", `Bearer ${refreshToken}`);
+
+    console.log(response.status); // Log the status code
+    console.log(response.body); // Log the response body
+
+    expect(response.statusCode).toBe(403);
+
+});
+
+test("Refresh token with invalid refresh token", async () => {
+    const response = await request(app)
+        .post("/auth/refreshToken");
+    expect(response.statusCode).toBe(401);
+});
+test("Logout user with valid credentials", async () => {
+
+    const response = await request(app)
+        .post("/auth/logout")
+        .set("Authorization", `Bearer ${refreshToken}`);
+    expect(response.statusCode).toBe(200);
+
+});
+
+test("Logout user without valid token", async () => {
+    const response = await request(app)
+        .post("/auth/logout");
+    expect(response.statusCode).toBe(401);
+});
+test("Google Sign-In with valid credentials", async () => {
+    // You need to replace the credential with a valid one for testing
+    const credential="eyJhbGciOiJSUzI1NiIsImtpZCI6ImJkYzRlMTA5ODE1ZjQ2OTQ2MGU2M2QzNGNkNjg0MjE1MTQ4ZDdiNTkiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI2MjcyMTk3NDM1MjEtOWIwN2dpczJvZmFkaTRuYmoyM3N2MjRlcGUxazVvMjkuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI2MjcyMTk3NDM1MjEtOWIwN2dpczJvZmFkaTRuYmoyM3N2MjRlcGUxazVvMjkuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDMwMjc5ODM0MjgwNTg3NDA4NzMiLCJlbWFpbCI6IjI3ZG9yaW4xMkBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmJmIjoxNzA3MzQwNDQzLCJuYW1lIjoi15PXldeo15nXnyDXm9eU158iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jS0F5Z3l5bWFYa1dFdHNiMlRPcm9oUTJUUVNEUkQzZWpERHh4R3F6a3o1dVA4PXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IteT15XXqNeZ158iLCJmYW1pbHlfbmFtZSI6Iteb15TXnyIsImxvY2FsZSI6ImhlIiwiaWF0IjoxNzA3MzQwNzQzLCJleHAiOjE3MDczNDQzNDMsImp0aSI6IjJjMTg1Yzc0ZGUxNTZkNTJhZGUyY2IxMjkzZGFjMmMzNjk2ZGI4NzUifQ.AXwEpKcQLW0rdxVeY44N_q0WZ7FijG6AUWmzZ9IwVfKE-CNcvufsJTqTfhWP4PeUt4fXIAy-6A7Ts3k1t7v0Clfp6iDj0ddJlTtqZBX_XKFGGW-dBfvdt4BUPXrga1v2CBkTa41A13iUYxMpi4uOenZEtrOVjxPOPx7MEo8sVpOgzHIHQE_nma-MjF9b7Q0JgR5GsbFzRgAdVt8eL03FGsZbGU9eoO4hmBV-qpRSqcjJU8vR5YG6srQsTfRHryHWd5V5AbEP1FXJQJ_Db_VgHVQYQPHzh7LC9b5_fRmSo1OZc4NauvcY5vNfL-A0RU2hlXibyirdIDaEmZ83KhnLOQ";
+	const response = await request(app)
+        .post("/auth/google")
+        .send({ credential });
+    console.log(response.body);
+    expect(response.statusCode).toBe(200);
+
+});
+
+test("Google Sign-In with invalid credentials", async () => {
+    // You need to replace the invalid credential for testing
+    const invalidCredential = "invalid_google_credential";
+    const response = await request(app)
+        .post("/auth/google")
+        .send({ credential: invalidCredential });
+    expect(response.statusCode).toBe(400);
+});
+
+test("Register user with valid credentials", async () => {
+    const response = await request(app)
+        .post("/auth/register")
+        .send({
+            name: "Valid User",
+            email: "validuser@example.com",
+            password: "password123",
+            age: 28,
+        });
+    expect(response.statusCode).toBe(201);
+});
+
+test("Login user with valid credentials and check returned data", async () => {
+    const response = await request(app)
+        .post("/auth/login")
+        .send({
+            email: "validuser@example.com",
+            password: "password123",
+        });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.accessToken).toBeDefined();
+    expect(response.body.refreshToken).toBeDefined();
+    expect(response.body.user).toBeDefined();
+    expect(response.body.user.email).toBe("validuser@example.com");
+});
+
+test("Attempt to register with an existing email", async () => {
+    const response = await request(app)
+        .post("/auth/register")
+        .send({
+            name: "Existing User",
+            email: "validuser@example.com", // Use the email from the previous test
+            password: "password456",
+            age: 30,
+        });
+    expect(response.statusCode).toBe(406);
+});
+
+
+test("Refresh token with expired refresh token", async () => {
+    // Manually create an expired refresh token for the user
+    const expiredRefreshToken = jwt.sign({ _id: createdUserId }, process.env.REFRESH_TOKEN_SECRET as string, { expiresIn: '1ms' });
+    const response = await request(app)
+        .post("/auth/refreshToken")
+        .set("Authorization", `Bearer ${expiredRefreshToken}`);
+    expect(response.statusCode).toBe(403);
+});
+
+test("Logout user with a valid token", async () => {
+    // Use the refresh token from the first Google Sign-In test
+    const response = await request(app)
+        .post("/auth/logout")
+        .set("Authorization", `Bearer ${refreshToken}`);
+    expect(response.statusCode).toBe(200);
+});
+
+test("Logout user with an invalid token", async () => {
+    const invalidToken = "invalid_refresh_token";
+    const response = await request(app)
+        .post("/auth/logout")
+        .set("Authorization", `Bearer ${invalidToken}`);
+    expect(response.statusCode).toBe(403);
+});
+
+
+
+
+
+

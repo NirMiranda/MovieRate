@@ -20,7 +20,7 @@ describe("review tests", () => {
     });
 
     test("Test Get Review by id", async () => {
-        const existingReviewId = "65bbd4c0f04eb6d2e28fc0ba";
+        const existingReviewId = "65c371590238b307af0d1786";
         const response = await request(app).get(`/review/getReviewById/${existingReviewId}`);
         expect(response.statusCode).toBe(200);
         expect(response.body._id).toBe(existingReviewId);
@@ -74,4 +74,5 @@ describe("review tests", () => {
         expect(response1.statusCode).toBe(200);
     });
 });
+
 
