@@ -20,7 +20,7 @@ const startServer = async () => {
                     version: '1.0.0',
                     description: 'REST server including authentication using JWT',
                 },
-                servers: [{ url: 'http://localhost:3003' }],
+                servers: [{ url: 'https://10.10.248.175:443' }],
             },
             apis: ['./routes/*.ts'],
         };
