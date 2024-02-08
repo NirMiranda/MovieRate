@@ -27,7 +27,9 @@ const initApp = (): Promise<Application> => {
         // const HttpServer = http.createServer(app)
         // new ServerSocket(HttpServer);
 
-        app.use(cors());
+        app.use(cors({
+            origin: 'https://nirmiranda.github.io',
+          }));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
 
